@@ -5,9 +5,11 @@ import { SERVICES_DATA } from '@/data/services';
 import { useCurrency } from '@/context/CurrencyContext';
 import { useCart } from '@/context/CartContext';
 
+type SpeedOption = 'normal' | 'express' | 'vip';
+
 export default function PriceCalculator() {
   const [selectedServiceId, setSelectedServiceId] = useState(SERVICES_DATA[0].id);
-  const [speedOption, setSpeedOption] = useState<'normal' | 'express' | 'vip'>('normal');
+  const [speedOption, setSpeedOption] = useState<SpeedOption>('normal');
   const [hasMultilingual, setHasMultilingual] = useState(false);
 
   const { formatPrice } = useCurrency();
@@ -25,8 +27,8 @@ export default function PriceCalculator() {
       speedOption === 'express'
         ? 'تسليم عاجل (+150 ر.س)'
         : speedOption === 'vip'
-        ? 'تسليم فوري VIP (+250 ر.س)'
-        : 'تسليم قياسي';
+          ? 'تسليم فوري VIP (+250 ر.س)'
+          : 'تسليم قياسي';
 
     const addons: string[] = [];
     if (speedOption !== 'normal') addons.push(speedName);
@@ -40,17 +42,17 @@ export default function PriceCalculator() {
       selectedAddons: addons,
       unitPriceSAR: totalSAR,
       qty: 1,
-      notes: `حاسبة الأسعار: ${speedName} ${hasMultilingual ? '+ متعدد اللغات' : ''}`
+      notes: `حاسبة الأسعار: ${speedName} ${hasMultilingual ? '+ متعدد اللغات' : ''}`,
     });
   };
 
   return (
     <>
-      <div className="section-divider"></div>
+      <div className="section-divider" />
       <section id="calculatorSection" className="section-padding">
         <div className="container">
           <div className="calculator-widget reveal-scale">
-            <div className="section-header-center" style={{ marginBottom: '25px' }}>
+            <div className="section-header-center">
               <span className="section-subtitle-tag">🧮 حاسبة ميزانية المشروعات</span>
               <h2 className="section-main-title">احسب تكلفة مشروعك الرقمي فوراً</h2>
               <p className="section-main-desc">
@@ -60,16 +62,7 @@ export default function PriceCalculator() {
 
             <div className="calc-form-grid">
               <div>
-                <label
-                  className="detail-section-label"
-                  style={{
-                    fontSize: '0.88rem',
-                    color: 'var(--text-muted)',
-                    fontWeight: 700,
-                    marginBottom: '8px',
-                    display: 'block'
-                  }}
-                >
+                <label className="detail-section-label calc-field-label" htmlFor="calcServiceSelect">
                   اختر نوع الخدمة المطلوب:
                 </label>
                 <select
@@ -87,23 +80,14 @@ export default function PriceCalculator() {
               </div>
 
               <div>
-                <label
-                  className="detail-section-label"
-                  style={{
-                    fontSize: '0.88rem',
-                    color: 'var(--text-muted)',
-                    fontWeight: 700,
-                    marginBottom: '8px',
-                    display: 'block'
-                  }}
-                >
+                <label className="detail-section-label calc-field-label" htmlFor="calcSpeedSelect">
                   حدد سرعة التنفيذ والتسليم:
                 </label>
                 <select
                   id="calcSpeedSelect"
                   className="form-control"
                   value={speedOption}
-                  onChange={(e) => setSpeedOption(e.target.value as any)}
+                  onChange={(e) => setSpeedOption(e.target.value as SpeedOption)}
                 >
                   <option value="normal">تسليم قياسي مريح (خلال 3 - 5 أيام)</option>
                   <option value="express">تسليم عاجل (+ {formatPrice(150)})</option>
@@ -112,60 +96,30 @@ export default function PriceCalculator() {
               </div>
 
               <div>
-                <label
-                  className="detail-section-label"
-                  style={{
-                    fontSize: '0.88rem',
-                    color: 'var(--text-muted)',
-                    fontWeight: 700,
-                    marginBottom: '8px',
-                    display: 'block'
-                  }}
-                >
-                  خيار اللغة الإضافي:
-                </label>
+                <span className="detail-section-label calc-field-label">خيار اللغة الإضافي:</span>
                 <label
                   className={`calc-addon-card ${hasMultilingual ? 'active' : ''}`}
                   htmlFor="calcLangCheck"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '0 16px',
-                    height: '50px',
-                    borderRadius: '10px',
-                    background: hasMultilingual ? 'rgba(56, 189, 248, 0.14)' : 'rgba(10, 24, 58, 0.95)',
-                    border: hasMultilingual ? '1.5px solid var(--cyan-accent)' : '1px solid rgba(56, 189, 248, 0.35)',
-                    cursor: 'pointer',
-                    transition: 'all 0.25s ease',
-                    userSelect: 'none',
-                    width: '100%',
-                    boxSizing: 'border-box'
-                  }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+                  <div className="calc-addon-card-inner">
                     <input
                       type="checkbox"
                       id="calcLangCheck"
+                      className="calc-addon-checkbox"
                       checked={hasMultilingual}
                       onChange={(e) => setHasMultilingual(e.target.checked)}
-                      style={{ width: '18px', height: '18px', accentColor: 'var(--cyan-accent)', cursor: 'pointer', flexShrink: 0 }}
                     />
-                    <span style={{ fontSize: '0.88rem', fontWeight: 700, color: hasMultilingual ? '#FFF' : 'var(--text-light)', whiteSpace: 'nowrap' }}>
-                      إضافة اللغة الإنجليزية للمشروع
-                    </span>
+                    <span className="calc-addon-text">إضافة اللغة الإنجليزية للمشروع</span>
                   </div>
-                  <span style={{ fontSize: '0.85rem', color: 'var(--cyan-accent)', fontWeight: 800, flexShrink: 0 }}>
-                    + {formatPrice(200)}
-                  </span>
+                  <span className="calc-addon-price">+ {formatPrice(200)}</span>
                 </label>
               </div>
             </div>
 
             <div className="calc-result-box">
               <div>
-                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>التكلفة التقديرية النهائية:</div>
-                <div id="calcResultPrice" style={{ fontSize: '1.8rem', fontWeight: 900, color: 'var(--cyan-accent)' }}>
+                <div className="calc-result-label">التكلفة التقديرية النهائية:</div>
+                <div id="calcResultPrice" className="calc-result-price">
                   {formatPrice(totalSAR)}
                 </div>
               </div>
@@ -176,7 +130,7 @@ export default function PriceCalculator() {
           </div>
         </div>
       </section>
-      <div className="section-divider"></div>
+      <div className="section-divider" />
     </>
   );
 }

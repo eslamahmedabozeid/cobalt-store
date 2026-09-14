@@ -1,5 +1,13 @@
 import { ServiceItem } from '@/types';
 
+export function getServiceBySlug(slug: string): ServiceItem {
+  const service = SERVICES_DATA.find((s) => s.slug === slug);
+  if (!service) {
+    throw new Error(`Service not found for slug: ${slug}`);
+  }
+  return service;
+}
+
 export const SERVICES_DATA: ServiceItem[] = [
   {
     id: 'social-media-posts',

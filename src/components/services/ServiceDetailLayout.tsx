@@ -7,10 +7,16 @@ import { useCurrency } from '@/context/CurrencyContext';
 import { useCart } from '@/context/CartContext';
 import { useToast } from '@/context/ToastContext';
 
+type CustomFieldValidation = {
+  valid: boolean;
+  message?: string;
+  customData?: Record<string, any>;
+};
+
 interface ServiceDetailLayoutProps {
   service: ServiceItem;
   children: React.ReactNode;
-  onValidateCustomFields?: () => { valid: boolean; message?: string; customData?: Record<string, any> };
+  onValidateCustomFields?: () => CustomFieldValidation;
   pageGuarantees?: { icon: string; title: string; desc: string }[];
   guaranteesTitle?: string;
   stepLabels?: string[];
@@ -32,9 +38,8 @@ export default function ServiceDetailLayout({
     service.packageTypes[0]?.id || ''
   );
   const [selectedAddonIds, setSelectedAddonIds] = useState<string[]>([]);
-  const [quantity, setQuantity] = useState<number>(1);
+  const quantity = 1;
 
-  // Stepper vs Full View State (Default to Stepper for clean, compact UX)
   const [activeStep, setActiveStep] = useState<number>(0);
   const [viewMode, setViewMode] = useState<'stepper' | 'all'>('stepper');
 
@@ -72,16 +77,19 @@ export default function ServiceDetailLayout({
     }
   };
 
-  const handleAddToCart = () => {
-    let customData: Record<string, any> | undefined = undefined;
-    if (onValidateCustomFields) {
-      const validation = onValidateCustomFields();
-      if (!validation.valid) {
-        showToast(validation.message || 'يرجى إكمال الحقول المطلوبة', 'warning');
-        return;
-      }
-      customData = validation.customData;
+  const getValidatedCustomData = (): Record<string, any> | null | undefined => {
+    if (!onValidateCustomFields) return undefined;
+    const validation = onValidateCustomFields();
+    if (!validation.valid) {
+      showToast(validation.message || 'يرجى إكمال الحقول المطلوبة', 'warning');
+      return null;
     }
+    return validation.customData;
+  };
+
+  const handleAddToCart = () => {
+    const customData = getValidatedCustomData();
+    if (customData === null) return;
 
     addToCart({
       serviceId: service.id,
@@ -92,20 +100,13 @@ export default function ServiceDetailLayout({
       unitPriceSAR: unitPriceSAR,
       qty: quantity,
       notes: `باقة: ${selectedPackage?.name}`,
-      customDetails: customData
+      customDetails: customData,
     });
   };
 
   const handleWhatsAppDirect = () => {
-    let customData: Record<string, any> | undefined = undefined;
-    if (onValidateCustomFields) {
-      const validation = onValidateCustomFields();
-      if (!validation.valid) {
-        showToast(validation.message || 'يرجى إكمال الحقول المطلوبة', 'warning');
-        return;
-      }
-      customData = validation.customData;
-    }
+    const customData = getValidatedCustomData();
+    if (customData === null) return;
 
     let msg = `*طلب خدمة من كوبالت:* ${service.title} 🚀\n`;
     msg += `📦 *الباقة المحددة:* ${selectedPackage?.name}\n`;
@@ -388,7 +389,7 @@ export default function ServiceDetailLayout({
                   <div className="sidebar-packages-list">
                     {service.packageTypes.map((pkg, idx) => {
                       const isSelected = selectedPackageId === pkg.id;
-                      const isPopular = idx === 1 || (service.packageTypes.length === 2 && idx === 1);
+                      const isPopular = idx === 1;
 
                       return (
                         <div

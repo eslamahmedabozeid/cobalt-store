@@ -80,8 +80,8 @@ export default function FileUploadBox({
           <label className="field-title">
             <span className="field-icon">{icon}</span>
             <span>{label}</span>
-            {required && <span className="req-star" style={{ color: '#F87171' }}>*</span>}
-            {conditional && <span className="req-star" style={{ color: '#FBBF24' }}>*</span>}
+            {required && <span className="req-star">*</span>}
+            {conditional && <span className="req-star conditional">*</span>}
           </label>
           {required ? (
             <span className="field-req-badge badge-required">إجباري</span>
@@ -148,7 +148,7 @@ export default function FileUploadBox({
           type="file"
           accept={accept}
           multiple={multiple}
-          style={{ display: 'none' }}
+          className="upload-file-input-hidden"
           onChange={handleFileChange}
         />
 

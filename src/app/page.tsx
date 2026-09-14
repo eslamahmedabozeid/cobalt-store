@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import HeroSlider from '@/components/home/HeroSlider';
 import FeatureBadges from '@/components/home/FeatureBadges';

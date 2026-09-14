@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import CurrencySelector from '@/components/ui/CurrencySelector';
 
@@ -10,16 +10,26 @@ interface HeaderProps {
   onOpenSearch: () => void;
 }
 
+const NAV_LINKS = [
+  { href: '/', label: 'الرئيسية', mobileLabel: '🏠 الرئيسية' },
+  { href: '/services', label: 'الخدمات', mobileLabel: '🛍️ الخدمات الرقمية' },
+  { href: '/#calculatorSection', label: 'حاسبة الأسعار', mobileLabel: '🧮 حاسبة التكلفة المباشرة' },
+  { href: '/#bundlesSection', label: 'الباقات', mobileLabel: '💎 الباقات المتكاملة' },
+  { href: '/#portfolioSection', label: 'معرض الأعمال', mobileLabel: '🎨 معرض أعمالنا' },
+  { href: '/#reviewsSection', label: 'الآراء والتقييمات', mobileLabel: '⭐ آراء العملاء والتقييمات' },
+];
+
 export default function Header({ onOpenSearch }: HeaderProps) {
   const { totalItemsCount, setIsCartOpen } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/';
+    if (href.startsWith('/#')) return false;
+    return pathname === href || pathname.startsWith(`${href}/`);
   };
 
   return (
@@ -27,7 +37,6 @@ export default function Header({ onOpenSearch }: HeaderProps) {
       <header className="header">
         <div className="container">
           <div className="header-inner">
-            {/* Official Brand Logo */}
             <Link href="/" className="brand-logo" onClick={closeMobileMenu}>
               <img
                 src="/assets/logo-cobalt-Be-YWUxa.png"
@@ -36,46 +45,23 @@ export default function Header({ onOpenSearch }: HeaderProps) {
               />
             </Link>
 
-            {/* Desktop Navigation Links */}
             <ul className="header-nav-links">
-              <li>
-                <Link href="/" className="header-nav-link active">
-                  الرئيسية
-                </Link>
-              </li>
-              <li>
-                <Link href="/services" className="header-nav-link">
-                  الخدمات
-                </Link>
-              </li>
-              <li>
-                <Link href="/#calculatorSection" className="header-nav-link">
-                  حاسبة الأسعار
-                </Link>
-              </li>
-              <li>
-                <Link href="/#bundlesSection" className="header-nav-link">
-                  الباقات
-                </Link>
-              </li>
-              <li>
-                <Link href="/#portfolioSection" className="header-nav-link">
-                  معرض الأعمال
-                </Link>
-              </li>
-              <li>
-                <Link href="/#reviewsSection" className="header-nav-link">
-                  الآراء والتقييمات
-                </Link>
-              </li>
+              {NAV_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className={`header-nav-link${isActive(link.href) ? ' active' : ''}`}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
 
-            {/* Minimal Header Actions */}
             <div className="header-actions">
-              {/* Mobile Hamburger Toggle Button */}
               <button
                 className="mobile-menu-btn"
-                onClick={toggleMobileMenu}
+                onClick={() => setIsMobileMenuOpen((open) => !open)}
                 title="القائمة"
                 type="button"
                 aria-label="فتح القائمة"
@@ -83,7 +69,6 @@ export default function Header({ onOpenSearch }: HeaderProps) {
                 {isMobileMenuOpen ? '✕' : '☰'}
               </button>
 
-              {/* Search Overlay Button */}
               <button
                 className="header-search-btn"
                 onClick={onOpenSearch}
@@ -94,10 +79,8 @@ export default function Header({ onOpenSearch }: HeaderProps) {
                 🔍
               </button>
 
-              {/* Currency Selector */}
               <CurrencySelector />
 
-              {/* Cart Trigger */}
               <button
                 className="cart-trigger-btn"
                 onClick={() => setIsCartOpen(true)}
@@ -117,102 +100,18 @@ export default function Header({ onOpenSearch }: HeaderProps) {
         </div>
       </header>
 
-      {/* Mobile Navigation Drawer */}
       {isMobileMenuOpen && (
-        <div
-          className="mobile-nav-drawer show"
-          style={{
-            position: 'fixed',
-            top: '70px',
-            right: 0,
-            left: 0,
-            background: 'rgba(5, 11, 24, 0.98)',
-            backdropFilter: 'blur(20px)',
-            borderBottom: '1px solid var(--border-color)',
-            zIndex: 998,
-            padding: '24px 20px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px'
-          }}
-        >
-          <Link
-            href="/"
-            onClick={closeMobileMenu}
-            style={{
-              color: '#FFF',
-              fontSize: '1.05rem',
-              fontWeight: 700,
-              padding: '10px 0',
-              borderBottom: '1px solid rgba(255,255,255,0.06)'
-            }}
-          >
-            🏠 الرئيسية
-          </Link>
-          <Link
-            href="/services"
-            onClick={closeMobileMenu}
-            style={{
-              color: '#FFF',
-              fontSize: '1.05rem',
-              fontWeight: 700,
-              padding: '10px 0',
-              borderBottom: '1px solid rgba(255,255,255,0.06)'
-            }}
-          >
-            🛍️ الخدمات الرقمية
-          </Link>
-          <Link
-            href="/#calculatorSection"
-            onClick={closeMobileMenu}
-            style={{
-              color: '#FFF',
-              fontSize: '1.05rem',
-              fontWeight: 700,
-              padding: '10px 0',
-              borderBottom: '1px solid rgba(255,255,255,0.06)'
-            }}
-          >
-            🧮 حاسبة التكلفة المباشرة
-          </Link>
-          <Link
-            href="/#bundlesSection"
-            onClick={closeMobileMenu}
-            style={{
-              color: '#FFF',
-              fontSize: '1.05rem',
-              fontWeight: 700,
-              padding: '10px 0',
-              borderBottom: '1px solid rgba(255,255,255,0.06)'
-            }}
-          >
-            💎 الباقات المتكاملة
-          </Link>
-          <Link
-            href="/#portfolioSection"
-            onClick={closeMobileMenu}
-            style={{
-              color: '#FFF',
-              fontSize: '1.05rem',
-              fontWeight: 700,
-              padding: '10px 0',
-              borderBottom: '1px solid rgba(255,255,255,0.06)'
-            }}
-          >
-            🎨 معرض أعمالنا
-          </Link>
-          <Link
-            href="/#reviewsSection"
-            onClick={closeMobileMenu}
-            style={{
-              color: '#FFF',
-              fontSize: '1.05rem',
-              fontWeight: 700,
-              padding: '10px 0'
-            }}
-          >
-            ⭐ آراء العملاء والتقييمات
-          </Link>
+        <div className="mobile-nav-drawer show">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={closeMobileMenu}
+              className="mobile-nav-link"
+            >
+              {link.mobileLabel}
+            </Link>
+          ))}
         </div>
       )}
     </>

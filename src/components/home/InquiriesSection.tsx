@@ -1,12 +1,7 @@
-'use client';
-
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { useToast } from '@/context/ToastContext';
 
 export default function InquiriesSection() {
-  const { showToast } = useToast();
-
   return (
     <>
       <div className="section-divider"></div>

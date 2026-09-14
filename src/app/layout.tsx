@@ -4,6 +4,9 @@ import { CurrencyProvider } from '@/context/CurrencyContext';
 import { ToastProvider } from '@/context/ToastContext';
 import { CartProvider } from '@/context/CartContext';
 import ClientLayoutWrapper from '@/components/layout/ClientLayoutWrapper';
+import AmbientGlowOrbs from '@/components/layout/AmbientGlowOrbs';
+import Footer from '@/components/layout/Footer';
+import FloatingWhatsApp from '@/components/layout/FloatingWhatsApp';
 
 export const metadata: Metadata = {
   title: 'كوبالت | متجر الخدمات الرقمية والتسويقية والمواقع',
@@ -12,15 +15,15 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: '/assets/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/assets/favicon-16x16.png', sizes: '16x16', type: 'image/png' }
+      { url: '/assets/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
     ],
-    apple: [{ url: '/assets/apple-touch-icon.png', sizes: '180x180' }]
+    apple: [{ url: '/assets/apple-touch-icon.png', sizes: '180x180' }],
   },
-  manifest: '/site.webmanifest'
+  manifest: '/site.webmanifest',
 };
 
 export default function RootLayout({
-  children
+  children,
 }: {
   children: React.ReactNode;
 }) {
@@ -38,9 +41,10 @@ export default function RootLayout({
         <ToastProvider>
           <CurrencyProvider>
             <CartProvider>
-              <ClientLayoutWrapper>
-                {children}
-              </ClientLayoutWrapper>
+              <AmbientGlowOrbs />
+              <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
+              <Footer />
+              <FloatingWhatsApp />
             </CartProvider>
           </CurrencyProvider>
         </ToastProvider>

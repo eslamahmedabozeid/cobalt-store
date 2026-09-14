@@ -43,7 +43,7 @@ export default function UrlRepeater({
         <label className="field-title">
           <span className="field-icon">🔗</span>
           <span>{label}</span>
-          {required && <span className="req-star" style={{ color: '#F87171' }}>*</span>}
+          {required && <span className="req-star">*</span>}
         </label>
         {required ? (
           <span className="field-req-badge badge-required">إجباري</span>
