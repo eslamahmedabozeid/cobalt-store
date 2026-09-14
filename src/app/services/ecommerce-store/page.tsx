@@ -10,17 +10,17 @@ const PAGE_GUARANTEES = [
   {
     icon: '💳',
     title: 'ربط بوابات الدفع والتحقق 100%',
-    desc: 'نضمن اختبار عمليات الشراء الحية وربط مدى وApple Pay وتابي وتمارا بنجاح.'
+    desc: 'نضمن اختبار عمليات الشراء الحية وربط مدى وApple Pay وتابي وتمارا والفيزا بنجاح تام.'
   },
   {
     icon: '⏱️',
     title: 'جاهزية فورية للمبيعات',
-    desc: 'تسليم متجر جاهز لإطلاق الحملات الإعلانية واستقبال طلبات الزوار مباشرة.'
+    desc: 'تسليم متجر جاهز تقنياً وبصرياً لإطلاق الحملات الإعلانية واستقبال طلبات العملاء مباشرة.'
   },
   {
     icon: '🔄',
     title: 'دعم فني وتدريب على الإدارة',
-    desc: 'تدريب كامل لك ولفريقك على كيفية إضافة المنتجات وإدارة الفواتير والطلبات.'
+    desc: 'تدريب كامل ومفصل لك ولفريقك على كيفية إضافة المنتجات وإدارة الفواتير والطلبات والمخزون.'
   }
 ];
 
@@ -124,16 +124,29 @@ export default function EcommerceStorePage() {
       onValidateCustomFields={validateFields}
       guaranteesTitle="ضمانات كوبالت لخدمات المتاجر الإلكترونية"
       pageGuarantees={PAGE_GUARANTEES}
+      stepLabels={['المنتجات والمخزون', 'بوابات الدفع والشحن', 'سياسات المتجر']}
     >
-      {/* Section 1 */}
+      {/* Section 1: Products & Inventory */}
       <div className="questionnaire-section-box">
-        <h3 style={{ fontSize: '1.05rem', color: 'var(--cyan-accent)', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span>📦</span> 1. المنتجات، التصنيفات وملفات الأسعار
-        </h3>
+        <div className="section-box-header">
+          <div className="section-step-badge">01</div>
+          <div className="section-header-info">
+            <h3 className="section-box-title">
+              <span className="section-icon">📦</span> المنتجات، التصنيفات وملفات الأسعار
+            </h3>
+            <p className="section-box-desc">
+              حدد تفاصيل منتجاتك وأقسام المتجر لتجهيز قاعدة البيانات ورفع المنتجات باحترافية
+            </p>
+          </div>
+        </div>
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🔢 عدد المنتجات التقريبي <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">🔢</span>
+              <span>عدد المنتجات التقريبي المراد إدراجها</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <input
@@ -149,7 +162,11 @@ export default function EcommerceStorePage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">📂 تصنيفات وأقسام المنتجات (Categories) <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">📂</span>
+              <span>تصنيفات وأقسام المنتجات (Categories)</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <textarea
@@ -162,15 +179,15 @@ export default function EcommerceStorePage() {
         </div>
 
         <FileUploadBox
-          label="📊 ملف المنتجات والتفاصيل (CSV / Excel)"
+          label="ملف المنتجات والتفاصيل (CSV / Excel)"
           uploadTitle={
             <>
               اسحب ملف الإكسيل / CSV هنا أو{' '}
-              <span style={{ color: 'var(--cyan-accent)', textDecoration: 'underline' }}>تصفح من جهازك</span>
+              <span className="upload-browse-link">تصفح من جهازك</span>
             </>
           }
           sublabel="(CSV, XLSX, XLS - يحتوي على أسماء المنتجات والأوصاف والأسعار)"
-          icon="📑"
+          icon="📊"
           accept=".csv,.xlsx,.xls"
           files={csvFiles}
           onFilesChange={setCsvFiles}
@@ -178,9 +195,9 @@ export default function EcommerceStorePage() {
         />
 
         <FileUploadBox
-          label="📸 صور المنتجات عالية الدقة"
+          label="صور المنتجات عالية الدقة"
           uploadTitle="ارفع صور المنتجات (يمكنك تحديد عدة صور أو ملف ZIP)"
-          icon="🖼️"
+          icon="📸"
           accept="image/*,.zip"
           multiple
           files={photoFiles}
@@ -189,9 +206,9 @@ export default function EcommerceStorePage() {
         />
 
         <FileUploadBox
-          label="💰 قائمة الأسعار والعروض الترويجية"
+          label="قائمة الأسعار والعروض الترويجية"
           uploadTitle="ارفع ملف الأسعار أو قائمة الخصومات"
-          icon="💵"
+          icon="💰"
           accept=".csv,.xlsx,.xls,.pdf,image/*"
           files={priceFiles}
           onFilesChange={setPriceFiles}
@@ -200,12 +217,15 @@ export default function EcommerceStorePage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">📦 إدارة المخزون (Stock & Inventory)</label>
+            <label className="field-title">
+              <span className="field-icon">🏢</span>
+              <span>منصة المتجر وإدارة المخزون (Stock & Platform)</span>
+            </label>
             <span className="field-req-badge badge-optional">اختياري</span>
           </div>
           <select
             className="form-control"
-            style={{ marginBottom: '10px' }}
+            style={{ marginBottom: '12px' }}
             value={inventoryType}
             onChange={(e) => setInventoryType(e.target.value)}
           >
@@ -219,7 +239,8 @@ export default function EcommerceStorePage() {
           <FileUploadBox
             label="ملف المخزون"
             hideLabel
-            uploadTitle={<span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-light)' }}>ارفع ملف جرد المخزون إن وجد (Excel / CSV)</span>}
+            uploadTitle="ارفع ملف جرد المخزون إن وجد (Excel / CSV)"
+            icon="📑"
             accept=".csv,.xlsx,.xls"
             files={inventoryFiles}
             onFilesChange={setInventoryFiles}
@@ -227,15 +248,27 @@ export default function EcommerceStorePage() {
         </div>
       </div>
 
-      {/* Section 2 */}
+      {/* Section 2: Payments & Shipping */}
       <div className="questionnaire-section-box">
-        <h3 style={{ fontSize: '1.05rem', color: 'var(--cyan-accent)', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span>💳</span> 2. بوابات الدفع، الشحن والضرائب
-        </h3>
+        <div className="section-box-header">
+          <div className="section-step-badge">02</div>
+          <div className="section-header-info">
+            <h3 className="section-box-title">
+              <span className="section-icon">💳</span> بوابات الدفع، الشحن والضرائب
+            </h3>
+            <p className="section-box-desc">
+              حدد قنوات الدفع المفضلة ومناطق الشحن لتهيئة تجربة شراء متكاملة لعملائك
+            </p>
+          </div>
+        </div>
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">💳 طرق وبوابات الدفع المطلوبة <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">💳</span>
+              <span>طرق وبوابات الدفع المطلوبة للربط</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <MultiChipSelector options={PAYMENT_OPTIONS} selected={paymentMethods} onChange={setPaymentMethods} />
@@ -243,7 +276,11 @@ export default function EcommerceStorePage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🌍 الدول المستهدفة للبيع <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">🌍</span>
+              <span>الدول المستهدفة للبيع والشحن</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <MultiChipSelector options={COUNTRY_OPTIONS} selected={targetCountries} onChange={setTargetCountries} />
@@ -251,7 +288,11 @@ export default function EcommerceStorePage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🚚 مناطق وتغطية الشحن والتوصيل <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">🚚</span>
+              <span>مناطق وتغطية الشحن والتوصيل</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <textarea
@@ -265,7 +306,10 @@ export default function EcommerceStorePage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🏢 شركات الشحن المفضلة للربط</label>
+            <label className="field-title">
+              <span className="field-icon">🏢</span>
+              <span>شركات الشحن المفضلة للربط</span>
+            </label>
             <span className="field-req-badge badge-optional">اختياري</span>
           </div>
           <input
@@ -279,18 +323,38 @@ export default function EcommerceStorePage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🏛️ هل المتجر خاضع لضريبة القيمة المضافة (VAT)؟ <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">🏛️</span>
+              <span>هل المتجر خاضع لضريبة القيمة المضافة (VAT)؟</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <div className="switch-toggle-group">
-            <button type="button" className={`switch-toggle-btn ${hasVat === 'yes' ? 'active' : ''}`} onClick={() => setHasVat('yes')}>نعم (15% ضريبة مضافة)</button>
-            <button type="button" className={`switch-toggle-btn ${hasVat === 'no' ? 'active' : ''}`} onClick={() => setHasVat('no')}>لا (غير مسجل ضريبياً)</button>
+            <button
+              type="button"
+              className={`switch-toggle-btn ${hasVat === 'yes' ? 'active' : ''}`}
+              onClick={() => setHasVat('yes')}
+            >
+              نعم (15% ضريبة مضافة)
+            </button>
+            <button
+              type="button"
+              className={`switch-toggle-btn ${hasVat === 'no' ? 'active' : ''}`}
+              onClick={() => setHasVat('no')}
+            >
+              لا (غير مسجل ضريبياً)
+            </button>
           </div>
         </div>
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">💱 العملة الأساسية للمتجر <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">💱</span>
+              <span>العملة الأساسية للمتجر</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <select className="form-control" value={storeCurrency} onChange={(e) => setStoreCurrency(e.target.value)}>
@@ -306,21 +370,32 @@ export default function EcommerceStorePage() {
         </div>
       </div>
 
-      {/* Section 3 */}
+      {/* Section 3: Policies */}
       <div className="questionnaire-section-box">
-        <h3 style={{ fontSize: '1.05rem', color: 'var(--cyan-accent)', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span>📜</span> 3. سياسات المتجر (الشحن، الاسترجاع والخصوصية)
-        </h3>
+        <div className="section-box-header">
+          <div className="section-step-badge">03</div>
+          <div className="section-header-info">
+            <h3 className="section-box-title">
+              <span className="section-icon">📜</span> سياسات المتجر (الشحن، الاسترجاع والخصوصية)
+            </h3>
+            <p className="section-box-desc">
+              صياغة شروط المتجر القانونية والتشغيلية المعتمدة لحماية المتجر وبناء ثقة العملاء
+            </p>
+          </div>
+        </div>
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">📦 سياسة الشحن والتوصيل (Shipping Policy)</label>
+            <label className="field-title">
+              <span className="field-icon">📦</span>
+              <span>سياسة الشحن والتوصيل (Shipping Policy)</span>
+            </label>
             <span className="field-req-badge badge-optional">اختياري</span>
           </div>
           <textarea
             className="form-control"
             rows={2}
-            placeholder="اكتب شروط وأوقات الشحن والتوصيل، أو اتركها لنقوم بصياغتها باحترافية..."
+            placeholder="اكتب شروط وأوقات الشحن والتوصيل، أو اتركها لنقوم بصياغتها باحترافية حسب الأنظمة الرسمية..."
             value={shippingPolicy}
             onChange={(e) => setShippingPolicy(e.target.value)}
           />
@@ -328,13 +403,16 @@ export default function EcommerceStorePage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🔄 سياسة الاسترجاع والاستبدال (Refund & Return Policy)</label>
+            <label className="field-title">
+              <span className="field-icon">🔄</span>
+              <span>سياسة الاسترجاع والاستبدال (Refund & Return Policy)</span>
+            </label>
             <span className="field-req-badge badge-optional">اختياري</span>
           </div>
           <textarea
             className="form-control"
             rows={2}
-            placeholder="اكتب مدة وشروط الاسترجاع والاستبدال المعتمدة لديك..."
+            placeholder="اكتب مدة وشروط الاسترجاع والاستبدال المعتمدة لديك، أو اتركها لنقوم بصياغتها..."
             value={returnPolicy}
             onChange={(e) => setReturnPolicy(e.target.value)}
           />
@@ -342,13 +420,16 @@ export default function EcommerceStorePage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🔒 سياسة الخصوصية وحماية بيانات العملاء (Privacy Policy)</label>
+            <label className="field-title">
+              <span className="field-icon">🔒</span>
+              <span>سياسة الخصوصية وحماية بيانات العملاء (Privacy Policy)</span>
+            </label>
             <span className="field-req-badge badge-optional">اختياري</span>
           </div>
           <textarea
             className="form-control"
             rows={2}
-            placeholder="اكتب شروط الخصوصية أو سنقوم بتهيئة السياسة المعتمدة لوزارة التجارة..."
+            placeholder="اكتب شروط الخصوصية أو سنقوم بتهيئة السياسة المعتمدة لوزارة التجارة وهيئة البيانات..."
             value={privacyPolicy}
             onChange={(e) => setPrivacyPolicy(e.target.value)}
           />

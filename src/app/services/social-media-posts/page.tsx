@@ -10,18 +10,18 @@ import { SERVICES_DATA } from '@/data/services';
 const PAGE_GUARANTEES = [
   {
     icon: '📁',
-    title: 'ملكية كاملة للمصادر',
-    desc: 'تسليم ملفات التصاميم المصدرية المفتوحة وقوالب العمل فور الاعتماد.'
+    title: 'ملكية كاملة لكافة الملفات والمصادر',
+    desc: 'تسليم ملفات التصاميم المصدرية المفتوحة وقوالب العمل بجودة عالية فور الاعتماد.'
   },
   {
     icon: '⏱️',
-    title: 'تسليم فوري للمحتوى',
-    desc: 'التزام تام بالخطة الزمنية لتسليم البوستات والستوريز والمحتوى الإعلاني.'
+    title: 'التزام تام بالخطة الزمنية',
+    desc: 'تسليم البوستات والستوريز والمحتوى الإعلاني في الموعد المحدد دون أي تأخير.'
   },
   {
     icon: '🔄',
-    title: 'تعديلات غير محدودة',
-    desc: 'تعديلات مجانية متواصلة حتى الوصول للشكل والنسق الجذاب المناسب لحسابك.'
+    title: 'تعديلات مستمرة حتى الرضا',
+    desc: 'تعديلات ومراجعات مجانية متواصلة حتى الوصول للشكل والنسق الجذاب المناسب لهوية حسابك.'
   }
 ];
 
@@ -37,11 +37,11 @@ const PLATFORM_OPTIONS = [
 ];
 
 const GOAL_OPTIONS = [
-  { value: 'مبيعات Direct Sales', label: 'مبيعات (Sales)' },
-  { value: 'انتشار Brand Awareness', label: 'انتشار (Awareness)' },
-  { value: 'تفاعل Engagement', label: 'تفاعل (Engagement)' },
+  { value: 'مبيعات Direct Sales', label: 'مبيعات مباشرة (Sales)' },
+  { value: 'انتشار Brand Awareness', label: 'انتشار وشهرة (Awareness)' },
+  { value: 'تفاعل Engagement', label: 'تفاعل ومتابعين (Engagement)' },
   { value: 'جمع بيانات عملاء Leads', label: 'عملاء محتملين (Leads)' },
-  { value: 'زيارات للموقع / المتجر Traffic', label: 'زيارات (Traffic)' }
+  { value: 'زيارات للموقع / المتجر Traffic', label: 'زيارات للموقع (Traffic)' }
 ];
 
 export default function SocialMediaPostsPage() {
@@ -117,23 +117,36 @@ export default function SocialMediaPostsPage() {
       onValidateCustomFields={validateFields}
       guaranteesTitle="ضمانات كوبالت لخدمات منشورات السوشيال ميديا"
       pageGuarantees={PAGE_GUARANTEES}
+      stepLabels={['المنصات والخدمة', 'النشاط والجمهور', 'العروض والنبرة', 'الملفات والمرفقات']}
     >
-      {/* Section 1 */}
+      {/* Section 1: Platforms & Service Type */}
       <div className="questionnaire-section-box">
-        <h3 style={{ fontSize: '1.05rem', color: 'var(--cyan-accent)', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span>🌐</span> 1. المنصات المطلوبة ونوع الخدمة
-        </h3>
+        <div className="section-box-header">
+          <div className="section-step-badge">01</div>
+          <div className="section-header-info">
+            <h3 className="section-box-title">
+              <span className="section-icon">🌐</span> المنصات المطلوبة ونوع الخدمة
+            </h3>
+            <p className="section-box-desc">
+              حدد قنوات التواصل المستهدفة وطبيعة الخدمة المطلوبة لحساباتك
+            </p>
+          </div>
+        </div>
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">📱 المنصات المطلوبة <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">📱</span>
+              <span>المنصات المطلوبة للنشر والتصميم</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <MultiChipSelector options={PLATFORM_OPTIONS} selected={platforms} onChange={setPlatforms} />
         </div>
 
         <UrlRepeater
-          label="🔗 روابط الحسابات الحالية"
+          label="روابط الحسابات الحالية على وسائل التواصل"
           placeholder="https://instagram.com/youraccount"
           urls={currentAccounts}
           onChange={setCurrentAccounts}
@@ -142,26 +155,42 @@ export default function SocialMediaPostsPage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🛠️ نوع الخدمة <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">🛠️</span>
+              <span>نوع الخدمة المطلوبة</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <select className="form-control" value={serviceType} onChange={(e) => setServiceType(e.target.value)}>
-            <option value="تصميم فقط">تصميم فقط (Graphic Design Only)</option>
-            <option value="محتوى + تصميم">محتوى + تصميم (Content Writing + Design)</option>
-            <option value="إدارة كاملة">إدارة كاملة (Full Management + Posting + Interaction)</option>
+            <option value="محتوى + تصميم">محتوى بيعي + تصاميم جرافيك مميزة (Content Writing + Design)</option>
+            <option value="تصميم فقط">تصميم جرافيك فقط (Graphic Design Only)</option>
+            <option value="إدارة كاملة">إدارة ونشر متكاملة (Full Management + Posting + Interaction)</option>
           </select>
         </div>
       </div>
 
-      {/* Section 2 */}
+      {/* Section 2: Activity & Target Audience */}
       <div className="questionnaire-section-box">
-        <h3 style={{ fontSize: '1.05rem', color: 'var(--cyan-accent)', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span>🎯</span> 2. تفاصيل النشاط والجمهور المستهدف
-        </h3>
+        <div className="section-box-header">
+          <div className="section-step-badge">02</div>
+          <div className="section-header-info">
+            <h3 className="section-box-title">
+              <span className="section-icon">🎯</span> تفاصيل النشاط والجمهور المستهدف
+            </h3>
+            <p className="section-box-desc">
+              توضيح مجال العمل وخصائص العملاء المستهدفين لبناء استراتيجية محتوى جذابة
+            </p>
+          </div>
+        </div>
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🏢 مجال النشاط <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">🏢</span>
+              <span>مجال النشاط والقطاع التجاري</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <input
@@ -175,7 +204,11 @@ export default function SocialMediaPostsPage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">👥 الجمهور المستهدف <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">👥</span>
+              <span>الجمهور والعملاء المستهدفين</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <textarea
@@ -189,7 +222,11 @@ export default function SocialMediaPostsPage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🚀 الهدف الرئيسي من الحساب <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">🚀</span>
+              <span>الهدف الرئيسي من التواجد الرقمي</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <MultiChipSelector options={GOAL_OPTIONS} selected={mainGoals} onChange={setMainGoals} />
@@ -197,7 +234,11 @@ export default function SocialMediaPostsPage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">✨ أهم الخدمات / المنتجات المراد التركيز عليها <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">✨</span>
+              <span>أهم الخدمات / المنتجات المراد التركيز عليها</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <textarea
@@ -210,15 +251,27 @@ export default function SocialMediaPostsPage() {
         </div>
       </div>
 
-      {/* Section 3 */}
+      {/* Section 3: Offers & Tone */}
       <div className="questionnaire-section-box">
-        <h3 style={{ fontSize: '1.05rem', color: 'var(--cyan-accent)', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span>🗣️</span> 3. العروض ونبرة التخاطب واللغة
-        </h3>
+        <div className="section-box-header">
+          <div className="section-step-badge">03</div>
+          <div className="section-header-info">
+            <h3 className="section-box-title">
+              <span className="section-icon">🗣️</span> العروض ونبرة التخاطب واللغة
+            </h3>
+            <p className="section-box-desc">
+              ضبط اللهجة ونبرة الخطاب التي تناسب علامتك وتصل للجمهور بفاعلية
+            </p>
+          </div>
+        </div>
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🏷️ هل توجد عروض حالية أو خصومات؟ <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">🏷️</span>
+              <span>هل توجد عروض حالية أو خصومات ترويجية؟</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <div className="switch-toggle-group">
@@ -227,20 +280,24 @@ export default function SocialMediaPostsPage() {
               className={`switch-toggle-btn ${hasOffers === 'no' ? 'active' : ''}`}
               onClick={() => setHasOffers('no')}
             >
-              لا (No)
+              لا (محتوى تعريفي عام)
             </button>
             <button
               type="button"
               className={`switch-toggle-btn ${hasOffers === 'yes' ? 'active' : ''}`}
               onClick={() => setHasOffers('yes')}
             >
-              نعم (Yes)
+              نعم (لدينا عروض وخصومات)
             </button>
           </div>
 
           <div className={`conditional-field-wrapper ${hasOffers === 'yes' ? 'active' : ''}`}>
             <div className="field-label-row">
-              <label className="field-title">📝 تفاصيل العروض والخصومات <span style={{ color: '#FBBF24' }}>*</span></label>
+              <label className="field-title">
+                <span className="field-icon">📝</span>
+                <span>تفاصيل العروض والخصومات</span>
+                <span className="req-star" style={{ color: '#FBBF24' }}>*</span>
+              </label>
               <span className="field-req-badge badge-conditional">شرطي</span>
             </div>
             <textarea
@@ -255,7 +312,11 @@ export default function SocialMediaPostsPage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🌐 لغة المحتوى والتصاميم <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">🌐</span>
+              <span>لغة المحتوى والتصاميم</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <select className="form-control" value={language} onChange={(e) => setLanguage(e.target.value)}>
@@ -268,7 +329,10 @@ export default function SocialMediaPostsPage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🎙️ نبرة التخاطب (Tone of Voice)</label>
+            <label className="field-title">
+              <span className="field-icon">🎙️</span>
+              <span>نبرة التخاطب (Tone of Voice)</span>
+            </label>
             <span className="field-req-badge badge-optional">اختياري</span>
           </div>
           <select className="form-control" value={toneOfVoice} onChange={(e) => setToneOfVoice(e.target.value)}>
@@ -281,18 +345,26 @@ export default function SocialMediaPostsPage() {
         </div>
       </div>
 
-      {/* Section 4 */}
+      {/* Section 4: Files & Benchmarks */}
       <div className="questionnaire-section-box">
-        <h3 style={{ fontSize: '1.05rem', color: 'var(--cyan-accent)', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span>📁</span> 4. الملفات والمرفقات والحسابات المرجعية
-        </h3>
+        <div className="section-box-header">
+          <div className="section-step-badge">04</div>
+          <div className="section-header-info">
+            <h3 className="section-box-title">
+              <span className="section-icon">📁</span> الملفات والمرفقات والحسابات المرجعية
+            </h3>
+            <p className="section-box-desc">
+              إرفاق الشعار، صور المنتجات، ودليل الهوية لضمان تناسق وجودة التصاميم
+            </p>
+          </div>
+        </div>
 
         <FileUploadBox
-          label="🖼️ الشعار (Logo) بدقة عالية"
+          label="الشعار (Logo) بدقة عالية"
           uploadTitle={
             <>
               اسحب ملف الشعار هنا أو{' '}
-              <span style={{ color: 'var(--cyan-accent)', textDecoration: 'underline' }}>تصفح من جهازك</span>
+              <span className="upload-browse-link">تصفح من جهازك</span>
             </>
           }
           sublabel="(PNG بخلفية شفافة, AI, EPS, SVG, PDF)"
@@ -303,18 +375,18 @@ export default function SocialMediaPostsPage() {
         />
 
         <FileUploadBox
-          label="🎨 دليل الهوية البصرية (Brand Guidelines)"
-          uploadTitle="ارفع ملف ألوان وخطوط الهوية (PDF / AI)"
-          icon="📑"
+          label="دليل الهوية البصرية (Brand Guidelines)"
+          uploadTitle="ارفع ملف ألوان وخطوط الهوية (PDF / AI / ZIP)"
+          icon="🎨"
           accept=".pdf,.ai,.zip,.png,.jpg"
           files={brandFiles}
           onFilesChange={setBrandFiles}
         />
 
         <FileUploadBox
-          label="📸 صور المنتجات والمواد الخام"
+          label="صور المنتجات والمواد الخام"
           uploadTitle="ارفع صور المنتجات عالية الجودة (يمكنك تحديد عدة صور)"
-          icon="🖼️"
+          icon="📸"
           accept="image/*,.zip"
           multiple
           files={productFiles}
@@ -322,9 +394,9 @@ export default function SocialMediaPostsPage() {
         />
 
         <FileUploadBox
-          label="🎥 مقاطع الفيديو والمونتاج إن وجدت"
+          label="مقاطع الفيديو والمونتاج إن وجدت"
           uploadTitle="ارفع مقاطع الفيديو (MP4 / MOV / Drive Link)"
-          icon="🎬"
+          icon="🎥"
           accept="video/*,.zip"
           multiple
           files={videoFiles}
@@ -332,16 +404,16 @@ export default function SocialMediaPostsPage() {
         />
 
         <FileUploadBox
-          label="💰 قائمة الأسعار والمنيو (Price List / Menu)"
+          label="قائمة الأسعار والمنيو (Price List / Menu)"
           uploadTitle="ارفع ملف الأسعار (PDF / Excel / Images)"
-          icon="📄"
+          icon="💰"
           accept=".pdf,.xls,.xlsx,.csv,image/*"
           files={priceFiles}
           onFilesChange={setPriceFiles}
         />
 
         <UrlRepeater
-          label="💡 حسابات أو تصاميم مرجعية تفضل أسلوبها"
+          label="حسابات أو تصاميم مرجعية تفضل أسلوبها"
           placeholder="https://instagram.com/inspirational_account"
           urls={refAccounts}
           onChange={setRefAccounts}

@@ -44,7 +44,7 @@ export default function Header({ onOpenSearch }: HeaderProps) {
                 </Link>
               </li>
               <li>
-                <Link href="/#catalogSection" className="header-nav-link">
+                <Link href="/services" className="header-nav-link">
                   الخدمات
                 </Link>
               </li>
@@ -150,7 +150,7 @@ export default function Header({ onOpenSearch }: HeaderProps) {
             🏠 الرئيسية
           </Link>
           <Link
-            href="/#catalogSection"
+            href="/services"
             onClick={closeMobileMenu}
             style={{
               color: '#FFF',

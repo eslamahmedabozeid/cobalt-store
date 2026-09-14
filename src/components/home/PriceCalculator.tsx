@@ -124,19 +124,38 @@ export default function PriceCalculator() {
                 >
                   خيار اللغة الإضافي:
                 </label>
-                <label className="addon-checkbox" style={{ height: '48px', cursor: 'pointer' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <label
+                  className={`calc-addon-card ${hasMultilingual ? 'active' : ''}`}
+                  htmlFor="calcLangCheck"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '0 16px',
+                    height: '50px',
+                    borderRadius: '10px',
+                    background: hasMultilingual ? 'rgba(56, 189, 248, 0.14)' : 'rgba(10, 24, 58, 0.95)',
+                    border: hasMultilingual ? '1.5px solid var(--cyan-accent)' : '1px solid rgba(56, 189, 248, 0.35)',
+                    cursor: 'pointer',
+                    transition: 'all 0.25s ease',
+                    userSelect: 'none',
+                    width: '100%',
+                    boxSizing: 'border-box'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
                     <input
                       type="checkbox"
                       id="calcLangCheck"
                       checked={hasMultilingual}
                       onChange={(e) => setHasMultilingual(e.target.checked)}
+                      style={{ width: '18px', height: '18px', accentColor: 'var(--cyan-accent)', cursor: 'pointer', flexShrink: 0 }}
                     />
-                    <span style={{ fontSize: '0.88rem', fontWeight: 700 }}>
-                      إضافة اللغة الإنجليزية للملف/الموقع
+                    <span style={{ fontSize: '0.88rem', fontWeight: 700, color: hasMultilingual ? '#FFF' : 'var(--text-light)', whiteSpace: 'nowrap' }}>
+                      إضافة اللغة الإنجليزية للمشروع
                     </span>
                   </div>
-                  <span style={{ fontSize: '0.85rem', color: 'var(--cyan-accent)', fontWeight: 800 }}>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--cyan-accent)', fontWeight: 800, flexShrink: 0 }}>
                     + {formatPrice(200)}
                   </span>
                 </label>

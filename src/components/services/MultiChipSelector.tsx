@@ -2,7 +2,13 @@
 
 import React from 'react';
 
-export type ChipOption = string | { value: string; label: string };
+export type ChipOption =
+  | string
+  | {
+      value: string;
+      label: string;
+      icon?: string;
+    };
 
 interface MultiChipSelectorProps {
   options: ChipOption[];
@@ -16,6 +22,10 @@ function getValue(opt: ChipOption): string {
 
 function getLabel(opt: ChipOption): string {
   return typeof opt === 'string' ? opt : opt.label;
+}
+
+function getIcon(opt: ChipOption): string | undefined {
+  return typeof opt === 'object' ? opt.icon : undefined;
 }
 
 export default function MultiChipSelector({
@@ -32,23 +42,36 @@ export default function MultiChipSelector({
   };
 
   return (
-    <div className="multi-select-chip-group">
-      {options.map((opt) => {
-        const value = getValue(opt);
-        const label = getLabel(opt);
-        const isActive = selected.includes(value);
-        return (
-          <button
-            key={value}
-            type="button"
-            className={`multi-chip-btn ${isActive ? 'active' : ''}`}
-            onClick={() => toggleOption(value)}
-          >
-            {isActive && <span className="chip-check-icon">✓</span>}{' '}
-            {label}
-          </button>
-        );
-      })}
+    <div className="multi-chip-wrapper">
+      <div className="multi-select-chip-group">
+        {options.map((opt) => {
+          const value = getValue(opt);
+          const label = getLabel(opt);
+          const icon = getIcon(opt);
+          const isActive = selected.includes(value);
+
+          return (
+            <button
+              key={value}
+              type="button"
+              className={`multi-chip-btn ${isActive ? 'active' : ''}`}
+              onClick={() => toggleOption(value)}
+              aria-pressed={isActive}
+            >
+              <span className="chip-indicator">
+                {isActive ? '✓' : '+'}
+              </span>
+              {icon && <span className="chip-custom-icon">{icon}</span>}
+              <span className="chip-label-text">{label}</span>
+            </button>
+          );
+        })}
+      </div>
+      {selected.length > 0 && (
+        <div className="chips-selected-counter">
+          تم تحديد <span className="counter-num">{selected.length}</span> خيارات
+        </div>
+      )}
     </div>
   );
 }

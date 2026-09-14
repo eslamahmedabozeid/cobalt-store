@@ -11,17 +11,17 @@ const PAGE_GUARANTEES = [
   {
     icon: '🎬',
     title: 'ملكية الفيديو والمصادر 100%',
-    desc: 'تسليم الفيديو بدقة 4K / Full HD مع كامل ملفات المشروع الصوتية والبصرية وقوالب العمل.'
+    desc: 'تسليم الفيديو بدقة 4K / Full HD مع كامل ملفات المشروع الصوتية والبصرية وقوالب العمل المفتوحة.'
   },
   {
     icon: '🎙️',
     title: 'تعليق صوتي استوديو نقي',
-    desc: 'تسجيل عبر نخبة من أفضل المعلقين الصوتيين في الوطن العربي بأعلى نقاوة صوتية.'
+    desc: 'تسجيل عبر نخبة من أفضل المعلقين الصوتيين في الوطن العربي بأعلى نقاوة صوتية مع المؤثرات الاحترافية.'
   },
   {
     icon: '🔄',
     title: 'تعديلات غير محدودة للمشاهد',
-    desc: 'تعديلات ومراجعات مجانية حتى الوصول لأعلى درجات الإبهار والجاذبية الإعلانية.'
+    desc: 'تعديلات ومراجعات مجانية حتى الوصول لأعلى درجات الإبهار والجاذبية الإعلانية ورضاك التام.'
   }
 ];
 
@@ -108,22 +108,35 @@ export default function MotionGraphicsPage() {
       onValidateCustomFields={validateFields}
       guaranteesTitle="ضمانات كوبالت لخدمات الموشن جرافيك وإنتاج الفيديو"
       pageGuarantees={PAGE_GUARANTEES}
+      stepLabels={['الأهداف والمنصات', 'السيناريو والرسالة', 'التعليق الصوتي والمرفقات']}
     >
-      {/* Section 1 */}
+      {/* Section 1: Goals & Platforms */}
       <div className="questionnaire-section-box">
-        <h3 style={{ fontSize: '1.05rem', color: 'var(--cyan-accent)', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span>🎯</span> 1. أهداف الفيديو والمنصات والمقاسات
-        </h3>
+        <div className="section-box-header">
+          <div className="section-step-badge">01</div>
+          <div className="section-header-info">
+            <h3 className="section-box-title">
+              <span className="section-icon">🎯</span> أهداف الفيديو والمنصات والمقاسات
+            </h3>
+            <p className="section-box-desc">
+              تحديد الغرض التسويقي من الفيديو والقنوات التي سيتم إطلاق الحملة عليها
+            </p>
+          </div>
+        </div>
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🎯 الهدف الأساسي من الفيديو <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">🎯</span>
+              <span>الهدف الأساسي من الفيديو</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <textarea
             className="form-control"
             rows={2}
-            placeholder="مثال: إطلاق تطبيق جديد، شرح آلية عمل الخدمة، إعلان موسمي لزيادة المبيعات، توعية..."
+            placeholder="مثال: إطلاق تطبيق جديد، شرح آلية عمل الخدمة، إعلان موسمي لزيادة المبيعات، فيديو توعوي..."
             value={videoGoal}
             onChange={(e) => setVideoGoal(e.target.value)}
           />
@@ -131,13 +144,17 @@ export default function MotionGraphicsPage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🛍️ المنتج أو الخدمة المراد الإعلان عنها <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">🛍️</span>
+              <span>المنتج أو الخدمة المراد الإعلان عنها</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <textarea
             className="form-control"
             rows={2}
-            placeholder="اكتب اسم وتفاصيل ومميزات المنتج/الخدمة الرئيسية..."
+            placeholder="اكتب اسم وتفاصيل ومميزات المنتج/الخدمة الرئيسية ونقاط البيع الفريدة..."
             value={videoProduct}
             onChange={(e) => setVideoProduct(e.target.value)}
           />
@@ -145,7 +162,11 @@ export default function MotionGraphicsPage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">📱 منصات النشر المستهدفة <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">📱</span>
+              <span>منصات النشر المستهدفة</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <MultiChipSelector options={PLATFORM_OPTIONS} selected={platforms} onChange={setPlatforms} />
@@ -153,37 +174,69 @@ export default function MotionGraphicsPage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">📐 أبعاد ومقاس الفيديو <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">📐</span>
+              <span>أبعاد ومقاس الفيديو المطلوب</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <select className="form-control" value={aspectRatio} onChange={(e) => setAspectRatio(e.target.value)}>
-            <option value="9:16 (طولي - ستوريز وتيك توك وريلز)">9:16 (طولي - ستوريز وتيك توك وريلز)</option>
-            <option value="16:9 (أفقي - يوتيوب وشاشات عرض)">16:9 (أفقي - يوتيوب وشاشات عرض)</option>
-            <option value="1:1 (مربع - انستقرام وبوستات)">1:1 (مربع - انستقرام وبوستات)</option>
-            <option value="أكثر من مقاس (متعدد الأحجام)">أكثر من مقاس (تسليم متعدد الأحجام)</option>
+            <option value="9:16 (طولي - ستوريز وتيك توك وريلز)">9:16 (طولي - ستوريز وتيك توك وريلز وسناب شات)</option>
+            <option value="16:9 (أفقي - يوتيوب وشاشات عرض)">16:9 (أفقي - يوتيوب ومواقع إلكترونية وشاشات)</option>
+            <option value="1:1 (مربع - انستقرام وبوستات)">1:1 (مربع - انستقرام وتويتر وفيسبوك)</option>
+            <option value="أكثر من مقاس (متعدد الأحجام)">أكثر من مقاس (تصدير بكافة الأبعاد المطلوبة)</option>
           </select>
         </div>
       </div>
 
-      {/* Section 2 */}
+      {/* Section 2: Script & Key Message */}
       <div className="questionnaire-section-box">
-        <h3 style={{ fontSize: '1.05rem', color: 'var(--cyan-accent)', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span>📝</span> 2. السيناريو والرسالة الأساسية
-        </h3>
+        <div className="section-box-header">
+          <div className="section-step-badge">02</div>
+          <div className="section-header-info">
+            <h3 className="section-box-title">
+              <span className="section-icon">📝</span> السيناريو والرسالة الأساسية
+            </h3>
+            <p className="section-box-desc">
+              صياغة حبكة الفيديو والرسالة الجوهرية التي ستحرك المشاهد لاتخاذ الإجراء
+            </p>
+          </div>
+        </div>
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">📜 هل السيناريو الإعلاني (Script) جاهز لديك؟ <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">📜</span>
+              <span>هل السيناريو الإعلاني (Script) جاهز لديك؟</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <div className="switch-toggle-group">
-            <button type="button" className={`switch-toggle-btn ${isScriptReady === 'no' ? 'active' : ''}`} onClick={() => setIsScriptReady('no')}>لا (نحتاج كتابة سيناريو احترافي)</button>
-            <button type="button" className={`switch-toggle-btn ${isScriptReady === 'yes' ? 'active' : ''}`} onClick={() => setIsScriptReady('yes')}>نعم (السيناريو جاهز لدي)</button>
+            <button
+              type="button"
+              className={`switch-toggle-btn ${isScriptReady === 'no' ? 'active' : ''}`}
+              onClick={() => setIsScriptReady('no')}
+            >
+              لا (نحتاج كتابة سيناريو احترافي)
+            </button>
+            <button
+              type="button"
+              className={`switch-toggle-btn ${isScriptReady === 'yes' ? 'active' : ''}`}
+              onClick={() => setIsScriptReady('yes')}
+            >
+              نعم (السيناريو جاهز لدي)
+            </button>
           </div>
 
           <div className={`conditional-field-wrapper ${isScriptReady === 'yes' ? 'active' : ''}`}>
             <div className="field-label-row">
-              <label className="field-title">✍️ نص أو ملف السيناريو الجاهز <span style={{ color: '#FBBF24' }}>*</span></label>
+              <label className="field-title">
+                <span className="field-icon">✍️</span>
+                <span>نص أو ملف السيناريو الجاهز</span>
+                <span className="req-star" style={{ color: '#FBBF24' }}>*</span>
+              </label>
               <span className="field-req-badge badge-conditional">شرطي</span>
             </div>
             <textarea
@@ -197,7 +250,8 @@ export default function MotionGraphicsPage() {
             <FileUploadBox
               label="ملف السيناريو"
               hideLabel
-              uploadTitle={<span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-light)' }}>أو ارفع ملف السيناريو (Word / PDF)</span>}
+              uploadTitle="أو ارفع ملف السيناريو (Word / PDF)"
+              icon="📄"
               accept=".doc,.docx,.pdf,.txt"
               files={scriptFiles}
               onFilesChange={setScriptFiles}
@@ -205,7 +259,7 @@ export default function MotionGraphicsPage() {
           </div>
 
           <div className={`conditional-field-wrapper ${isScriptReady === 'no' ? 'active' : ''}`}>
-            <div style={{ fontSize: '0.88rem', color: 'var(--cyan-accent)', fontWeight: 700 }}>
+            <div className="included-perk-notice">
               ✨ كتابة السيناريو الإعلاني الاحترافي مشمولة مجاناً ضمن باقتك من فريق كوبالت!
             </div>
           </div>
@@ -213,7 +267,11 @@ export default function MotionGraphicsPage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">💡 الرسالة الأساسية (Key Message) <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">💡</span>
+              <span>الرسالة الأساسية (Key Message)</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <textarea
@@ -227,39 +285,70 @@ export default function MotionGraphicsPage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">📢 الدعوة لاتخاذ إجراء (Call To Action - CTA)</label>
+            <label className="field-title">
+              <span className="field-icon">📢</span>
+              <span>الدعوة لاتخاذ إجراء (Call To Action - CTA)</span>
+            </label>
             <span className="field-req-badge badge-optional">اختياري</span>
           </div>
           <input
             type="text"
             className="form-control"
-            placeholder="مثال: اطلب الآن واستفد من الخصم، حمل التطبيق من الرابط..."
+            placeholder="مثال: اطلب الآن واستفد من الخصم، حمل التطبيق من الرابط، تواصل معنا..."
             value={cta}
             onChange={(e) => setCta(e.target.value)}
           />
         </div>
       </div>
 
-      {/* Section 3 */}
+      {/* Section 3: Voiceover & Assets */}
       <div className="questionnaire-section-box">
-        <h3 style={{ fontSize: '1.05rem', color: 'var(--cyan-accent)', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span>🎙️</span> 3. التعليق الصوتي (Voice Over) والملفات
-        </h3>
+        <div className="section-box-header">
+          <div className="section-step-badge">03</div>
+          <div className="section-header-info">
+            <h3 className="section-box-title">
+              <span className="section-icon">🎙️</span> التعليق الصوتي (Voice Over) والملفات
+            </h3>
+            <p className="section-box-desc">
+              تحديد لهجة ونوع المعلق الصوتي وإرفاق الشعار وملفات الهوية
+            </p>
+          </div>
+        </div>
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🎙️ هل تريد تعليق صوتي استوديو (Voice Over)؟ <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">🎙️</span>
+              <span>هل تريد تعليق صوتي استوديو (Voice Over)؟</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <div className="switch-toggle-group">
-            <button type="button" className={`switch-toggle-btn ${hasVoiceOver === 'yes' ? 'active' : ''}`} onClick={() => setHasVoiceOver('yes')}>نعم (Yes)</button>
-            <button type="button" className={`switch-toggle-btn ${hasVoiceOver === 'no' ? 'active' : ''}`} onClick={() => setHasVoiceOver('no')}>لا (مؤثرات موسيقية فقط)</button>
+            <button
+              type="button"
+              className={`switch-toggle-btn ${hasVoiceOver === 'yes' ? 'active' : ''}`}
+              onClick={() => setHasVoiceOver('yes')}
+            >
+              نعم (تسجيل استوديو محترف)
+            </button>
+            <button
+              type="button"
+              className={`switch-toggle-btn ${hasVoiceOver === 'no' ? 'active' : ''}`}
+              onClick={() => setHasVoiceOver('no')}
+            >
+              لا (مؤثرات موسيقية فقط)
+            </button>
           </div>
 
           <div className={`conditional-field-wrapper ${hasVoiceOver === 'yes' ? 'active' : ''}`}>
             <div className="form-field-group">
               <div className="field-label-row">
-                <label className="field-title">🗣️ لغة ولهجة التعليق الصوتي <span style={{ color: '#FBBF24' }}>*</span></label>
+                <label className="field-title">
+                  <span className="field-icon">🗣️</span>
+                  <span>لغة ولهجة التعليق الصوتي</span>
+                  <span className="req-star" style={{ color: '#FBBF24' }}>*</span>
+                </label>
                 <span className="field-req-badge badge-conditional">شرطي</span>
               </div>
               <select className="form-control" value={voiceLang} onChange={(e) => setVoiceLang(e.target.value)}>
@@ -275,11 +364,15 @@ export default function MotionGraphicsPage() {
 
             <div className="form-field-group">
               <div className="field-label-row">
-                <label className="field-title">👤 نبرة ونوع الصوت <span style={{ color: '#FBBF24' }}>*</span></label>
+                <label className="field-title">
+                  <span className="field-icon">👤</span>
+                  <span>نبرة ونوع الصوت</span>
+                  <span className="req-star" style={{ color: '#FBBF24' }}>*</span>
+                </label>
                 <span className="field-req-badge badge-conditional">شرطي</span>
               </div>
               <select className="form-control" value={voiceGender} onChange={(e) => setVoiceGender(e.target.value)}>
-                <option value="صوت رجالي (Male Voice)">صوت رجالي فخم (Male Voice)</option>
+                <option value="صوت رجالي (Male Voice)">صوت رجالي فخم وإعلاني (Male Voice)</option>
                 <option value="صوت نسائي (Female Voice)">صوت نسائي ناعم وواضح (Female Voice)</option>
                 <option value="اترك الاختيار لفريق كوبالت">اترك الاختيار لفريق كوبالت للأفضلية</option>
               </select>
@@ -288,8 +381,9 @@ export default function MotionGraphicsPage() {
         </div>
 
         <FileUploadBox
-          label="🖼️ الشعار (Logo) بدقة فيكتور عالية"
+          label="الشعار (Logo) بدقة فيكتور عالية"
           uploadTitle="ارفع ملف الشعار (AI, SVG, PNG شفاف, PDF)"
+          icon="🖼️"
           accept="image/*,.ai,.svg,.pdf"
           files={logoFiles}
           onFilesChange={setLogoFiles}
@@ -297,18 +391,18 @@ export default function MotionGraphicsPage() {
         />
 
         <FileUploadBox
-          label="🎨 ألوان وهوية العلامة التجارية"
+          label="ألوان وهوية العلامة التجارية"
           uploadTitle="ارفع كود الألوان أو دليل الهوية (PDF / AI)"
-          icon="📑"
+          icon="🎨"
           accept=".pdf,.ai,.zip,.png,.jpg"
           files={brandFiles}
           onFilesChange={setBrandFiles}
         />
 
         <FileUploadBox
-          label="📸 صور المنتج أو لقطات الشاشة للتطبيق"
-          uploadTitle="ارفع لقطات الشاشة أو صور المنتج"
-          icon="🖼️"
+          label="صور المنتج أو لقطات الشاشة للتطبيق"
+          uploadTitle="ارفع لقطات الشاشة أو صور المنتج المراد تضمينها"
+          icon="📸"
           accept="image/*,.zip"
           multiple
           files={photoFiles}
@@ -316,9 +410,9 @@ export default function MotionGraphicsPage() {
         />
 
         <FileUploadBox
-          label="🎥 مقاطع خام أو تسجيلات شاشة للتطبيق"
-          uploadTitle="ارفع مقاطع خام لتضمينها في المونتاج"
-          icon="🎬"
+          label="مقاطع خام أو تسجيلات شاشة للتطبيق"
+          uploadTitle="ارفع مقاطع خام لتضمينها في المونتاج والتحريك"
+          icon="🎥"
           accept="video/*,.zip"
           multiple
           files={rawFiles}
@@ -326,7 +420,7 @@ export default function MotionGraphicsPage() {
         />
 
         <UrlRepeater
-          label="💡 فيديوهات مرجعية تفضل أسلوب تحريكها"
+          label="فيديوهات مرجعية تفضل أسلوب تحريكها وإخراجها"
           placeholder="https://youtube.com/watch?v=... أو Vimeo"
           urls={refUrls}
           onChange={setRefUrls}

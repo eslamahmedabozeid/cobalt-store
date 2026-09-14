@@ -13,6 +13,7 @@ interface ServiceDetailLayoutProps {
   onValidateCustomFields?: () => { valid: boolean; message?: string; customData?: Record<string, any> };
   pageGuarantees?: { icon: string; title: string; desc: string }[];
   guaranteesTitle?: string;
+  stepLabels?: string[];
 }
 
 export default function ServiceDetailLayout({
@@ -20,7 +21,8 @@ export default function ServiceDetailLayout({
   children,
   onValidateCustomFields,
   pageGuarantees,
-  guaranteesTitle
+  guaranteesTitle,
+  stepLabels
 }: ServiceDetailLayoutProps) {
   const { formatPrice } = useCurrency();
   const { addToCart } = useCart();
@@ -98,7 +100,7 @@ export default function ServiceDetailLayout({
     }
 
     let msg = `*طلب خدمة من كوبالت:* ${service.title} 🚀\n`;
-    msg += `📦 *الباقة:* ${selectedPackage?.name}\n`;
+    msg += `📦 *الباقة المحددة:* ${selectedPackage?.name}\n`;
     if (selectedAddonTitles.length > 0) {
       msg += `✨ *الإضافات:* ${selectedAddonTitles.join(' + ')}\n`;
     }
@@ -119,125 +121,223 @@ export default function ServiceDetailLayout({
   };
 
   return (
-    <>
-      <section className="service-detail-section" style={{ padding: '40px 0 80px' }}>
+    <div className="service-detail-wrapper">
+      {/* Background Ambient Glows */}
+      <div className="ambient-glow glow-top-left" />
+      <div className="ambient-glow glow-bottom-right" />
+
+      <section className="service-detail-section">
         <div className="container">
-          {/* Breadcrumb */}
-          <div className="detail-breadcrumb" style={{ marginBottom: '24px' }}>
-            <Link href="/">الرئيسية</Link> &gt;{' '}
-            <Link href="/#catalogSection">الخدمات الرقمية</Link> &gt;{' '}
-            <span style={{ color: 'var(--cyan-accent)' }}>{service.title}</span>
+          {/* Breadcrumb Bar */}
+          <nav className="detail-breadcrumb-bar" aria-label="مسار التنقل">
+            <div className="breadcrumb-items">
+              <Link href="/" className="breadcrumb-link home-link">
+                <span className="breadcrumb-icon">🏠</span>
+                <span>الرئيسية</span>
+              </Link>
+              <span className="breadcrumb-separator">/</span>
+              <Link href="/services" className="breadcrumb-link">
+                <span>الخدمات الرقمية</span>
+              </Link>
+              <span className="breadcrumb-separator">/</span>
+              <span className="breadcrumb-current">{service.title}</span>
+            </div>
+            <Link href="/services" className="breadcrumb-back-btn">
+              <span>← العودة لكافة الخدمات</span>
+            </Link>
+          </nav>
+
+          {/* Mobile Only Poster Image Banner - Appears First on Mobile */}
+          <div className="mobile-service-poster-banner">
+            <div className="poster-img-wrapper">
+              <img
+                src={service.image}
+                alt={service.title}
+                className="service-poster-img"
+              />
+              <div className="poster-overlay-badge">
+                <span className="badge-glow-dot" />
+                <span>جاهز للتنفيذ الفوري</span>
+              </div>
+            </div>
           </div>
 
-          {/* Main Grid: Questionnaire (Left) + Sticky Sidebar (Right) */}
+          {/* Main Grid: Left Questionnaire & Right Sticky Sidebar */}
           <div className="service-page-grid">
-            {/* Left Column: Interactive Questionnaire */}
+            {/* Left Column: Interactive Questionnaire Card */}
             <div className="questionnaire-card">
+              {/* Header Hero Banner */}
               <div className="questionnaire-header">
-                <span className="section-subtitle-tag">{service.badge}</span>
-                <h1 style={{ fontSize: '2.1rem', fontWeight: 900, margin: '10px 0', color: '#FFF' }}>
+                <div className="service-badge-row">
+                  <span className="service-hero-badge">{service.badge}</span>
+                  <span className="service-category-pill">{service.categoryName}</span>
+                </div>
+
+                <h1 className="service-hero-title">
                   {service.title}
                 </h1>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                  <div style={{ color: 'var(--gold-accent)', fontSize: '1.1rem' }}>★★★★★</div>
-                  <span style={{ fontSize: '0.88rem', color: 'var(--text-muted)', fontWeight: 700 }}>
-                    {service.rating} ({service.reviewsCount} تقييم مشتري موثق)
-                  </span>
+                {/* Rating & Trust Metrics Pill Row */}
+                <div className="service-metrics-row">
+                  <div className="metric-pill rating-pill">
+                    <span className="metric-stars">★★★★★</span>
+                    <span className="metric-text">
+                      <strong>{service.rating}</strong> ({service.reviewsCount} تقييم موثق)
+                    </span>
+                  </div>
+
+                  <div className="metric-pill delivery-pill">
+                    <span className="metric-icon">⚡</span>
+                    <span className="metric-text">{service.delivery}</span>
+                  </div>
+
+                  <div className="metric-pill guarantee-pill">
+                    <span className="metric-icon">🛡️</span>
+                    <span className="metric-text">ضمان الجودة 100%</span>
+                  </div>
                 </div>
 
-                <p style={{ fontSize: '0.94rem', color: 'var(--text-light)', lineHeight: '1.7', margin: 0 }}>
+                <p className="service-hero-desc">
                   {service.shortDesc}
                 </p>
+
+                {/* Micro Benefits Strip */}
+                <div className="service-micro-benefits">
+                  <div className="micro-benefit-item">
+                    <span className="benefit-check">✓</span>
+                    <span>تعديلات مجانية حتى الرضا</span>
+                  </div>
+                  <div className="micro-benefit-item">
+                    <span className="benefit-check">✓</span>
+                    <span>تسليم كامل الملفات المصدرية</span>
+                  </div>
+                  <div className="micro-benefit-item">
+                    <span className="benefit-check">✓</span>
+                    <span>دعم فني وتواصل مباشر</span>
+                  </div>
+                </div>
               </div>
 
+              {/* Step Navigation / Flow Indicator (if step labels provided) */}
+              {stepLabels && stepLabels.length > 0 && (
+                <div className="questionnaire-steps-tracker">
+                  <div className="tracker-title">مراحل استبيان متطلبات المشروع:</div>
+                  <div className="steps-tracker-list">
+                    {stepLabels.map((label, idx) => (
+                      <div key={idx} className="step-tracker-item">
+                        <span className="step-num">{idx + 1}</span>
+                        <span className="step-label">{label}</span>
+                        {idx < stepLabels.length - 1 && <span className="step-arrow">←</span>}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Custom Questionnaire Form Fields */}
-              {children}
+              <div className="questionnaire-body">
+                {children}
+              </div>
             </div>
 
-            {/* Right Column: Sticky Summary & Package Configurator */}
-            <div className="service-sidebar-sticky">
+            {/* Right Column: Sticky Poster & Pricing Configurator */}
+            <aside className="service-sidebar-sticky">
+              {/* Service Poster Card (Desktop Sidebar) */}
+              <div className="service-poster-card desktop-poster-card">
+                <div className="poster-img-wrapper">
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className="service-poster-img"
+                  />
+                  <div className="poster-overlay-badge">
+                    <span className="badge-glow-dot" />
+                    <span>جاهز للتنفيذ الفوري</span>
+                  </div>
+                </div>
+              </div>
+
               <div className="sticky-order-box">
-                <h3 style={{ fontSize: '1.1rem', color: '#FFF', fontWeight: 800, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span>⚡</span> اختيار باقة الخدمة
-                </h3>
+                {/* Box Header */}
+                <div className="order-box-header">
+                  <div className="header-title-row">
+                    <span className="header-icon">⚡</span>
+                    <h3 className="box-title">تخصيص الباقة والطلب</h3>
+                  </div>
+                  <span className="instant-calc-tag">حساب فوري</span>
+                </div>
 
                 {/* Package Tiers Radio Cards */}
-                <div className="sidebar-packages-list" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {service.packageTypes.map((pkg) => {
-                    const isSelected = selectedPackageId === pkg.id;
-                    return (
-                      <div
-                        key={pkg.id}
-                        className={`package-radio-card ${isSelected ? 'active' : ''}`}
-                        onClick={() => setSelectedPackageId(pkg.id)}
-                        style={{
-                          padding: '12px 14px',
-                          borderRadius: '12px',
-                          border: isSelected ? '2px solid var(--cyan-accent)' : '1px solid var(--border-color)',
-                          background: isSelected ? 'rgba(56, 189, 248, 0.1)' : 'rgba(255,255,255,0.03)',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center'
-                        }}
-                      >
-                        <div>
-                          <div style={{ fontWeight: 800, color: isSelected ? 'var(--cyan-accent)' : '#FFF', fontSize: '0.92rem' }}>
-                            {pkg.name}
+                <div className="sidebar-section">
+                  <div className="sidebar-section-title">اختر باقة الخدمة المناسبة:</div>
+                  <div className="sidebar-packages-list">
+                    {service.packageTypes.map((pkg, idx) => {
+                      const isSelected = selectedPackageId === pkg.id;
+                      const isPopular = idx === 1 || (service.packageTypes.length === 2 && idx === 1);
+
+                      return (
+                        <div
+                          key={pkg.id}
+                          className={`package-radio-card ${isSelected ? 'active' : ''}`}
+                          onClick={() => setSelectedPackageId(pkg.id)}
+                          role="radio"
+                          aria-checked={isSelected}
+                          tabIndex={0}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              setSelectedPackageId(pkg.id);
+                            }
+                          }}
+                        >
+                          {isPopular && <span className="package-popular-badge">⭐ الخيار الأكثر طلباً</span>}
+                          <div className="pkg-radio-indicator">
+                            <span className="pkg-radio-circle" />
                           </div>
-                          {pkg.description && (
-                            <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                              {pkg.description}
-                            </div>
-                          )}
+                          <div className="pkg-info-col">
+                            <div className="pkg-name">{pkg.name}</div>
+                            {pkg.description && (
+                              <div className="pkg-desc">{pkg.description}</div>
+                            )}
+                          </div>
+                          <div className="pkg-price-col">
+                            <span className="pkg-price-val">{formatPrice(pkg.priceSAR)}</span>
+                          </div>
                         </div>
-                        <div style={{ fontWeight: 900, color: '#FFF', fontSize: '0.95rem' }}>
-                          {formatPrice(pkg.priceSAR)}
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
 
                 {/* Optional Addons */}
                 {service.addons && service.addons.length > 0 && (
-                  <div style={{ marginTop: '18px' }}>
-                    <h4 style={{ fontSize: '0.95rem', color: '#FFF', fontWeight: 800, marginBottom: '10px' }}>
-                      ترقيات وإضافات اختيارية:
-                    </h4>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div className="sidebar-section addons-section">
+                    <div className="sidebar-section-title">
+                      <span>ترقيات وإضافات اختيارية:</span>
+                      <span className="addons-subtitle">(يمكنك اختيار أكثر من إضافة)</span>
+                    </div>
+                    <div className="sidebar-addons-list">
                       {service.addons.map((addon) => {
                         const isChecked = selectedAddonIds.includes(addon.id);
                         return (
                           <label
                             key={addon.id}
                             className={`sidebar-addon-label ${isChecked ? 'active' : ''}`}
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'center',
-                              padding: '10px',
-                              borderRadius: '10px',
-                              background: isChecked ? 'rgba(56, 189, 248, 0.08)' : 'rgba(255,255,255,0.02)',
-                              border: isChecked ? '1px solid var(--cyan-accent)' : '1px solid rgba(255,255,255,0.06)',
-                              cursor: 'pointer',
-                              fontSize: '0.85rem'
-                            }}
                           >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <div className="addon-checkbox-row">
                               <input
                                 type="checkbox"
                                 checked={isChecked}
                                 onChange={() => toggleAddon(addon.id)}
+                                className="sidebar-addon-input"
                               />
-                              <span style={{ color: isChecked ? '#FFF' : 'var(--text-light)', fontWeight: isChecked ? 700 : 500 }}>
-                                {addon.title}
-                              </span>
+                              <div className="addon-text-group">
+                                <span className="addon-title">{addon.title}</span>
+                                {addon.desc && <span className="addon-desc">{addon.desc}</span>}
+                              </div>
                             </div>
-                            <strong style={{ color: 'var(--cyan-accent)', fontSize: '0.85rem' }}>
+                            <span className="addon-price-tag">
                               +{formatPrice(addon.priceSAR)}
-                            </strong>
+                            </span>
                           </label>
                         );
                       })}
@@ -246,122 +346,112 @@ export default function ServiceDetailLayout({
                 )}
 
                 {/* Deliverables Checklist */}
-                <div style={{ marginTop: '18px', paddingTop: '14px', borderTop: '1px solid var(--border-color)' }}>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '8px', fontWeight: 700 }}>
-                    ما ستحصل عليه في هذا الطلب:
-                  </div>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <div className="sidebar-section deliverables-section">
+                  <div className="sidebar-section-title">ما ستحصل عليه في هذا الطلب:</div>
+                  <ul className="deliverables-list">
                     {service.deliverables.map((del, idx) => (
-                      <li key={idx} style={{ fontSize: '0.82rem', color: 'var(--text-light)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span style={{ color: 'var(--emerald-accent)' }}>✓</span>
-                        <span>{del}</span>
+                      <li key={idx} className="deliverable-item">
+                        <span className="del-check-icon">✓</span>
+                        <span className="del-text">{del}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
                 {/* Total Price Box */}
-                <div
-                  style={{
-                    marginTop: '20px',
-                    padding: '14px',
-                    borderRadius: '12px',
-                    background: 'rgba(56, 189, 248, 0.06)',
-                    border: '1px solid rgba(56, 189, 248, 0.25)',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                  }}
-                >
-                  <div>
-                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>الإجمالي المحسوب</div>
-                    <div style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--cyan-accent)' }}>
-                      {formatPrice(totalPriceSAR)}
-                    </div>
+                <div className="sidebar-total-card">
+                  <div className="total-label-row">
+                    <span className="total-label">الإجمالي النهائي المحسوب</span>
+                    <span className="delivery-badge-pill">
+                      <span className="speed-icon">⚡</span> {service.delivery}
+                    </span>
                   </div>
-                  <div style={{ textAlign: 'left', fontSize: '0.8rem', color: 'var(--emerald-accent)', fontWeight: 700 }}>
-                    {service.delivery}
+                  <div className="total-amount-row">
+                    <div className="total-currency-display">
+                      <span className="price-number">{formatPrice(totalPriceSAR)}</span>
+                    </div>
+                    {service.oldPriceSAR && (
+                      <div className="old-price-strike">
+                        بدلاً من {formatPrice(service.oldPriceSAR + addonsTotalSAR)}
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 {/* Action CTA Buttons */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '16px' }}>
+                <div className="sidebar-actions-group">
                   <button
                     type="button"
-                    className="btn-cobalt-primary"
+                    className="btn-order-primary"
                     onClick={handleAddToCart}
-                    style={{ width: '100%', justifyContent: 'center' }}
                   >
-                    🛒 إضافة للسلة ومتابعة الطلب
+                    <span className="btn-icon">🛒</span>
+                    <span className="btn-text">إضافة للسلة ومتابعة الطلب</span>
+                    <span className="btn-arrow">←</span>
                   </button>
+
                   <button
                     type="button"
-                    className="btn-whatsapp-direct"
+                    className="btn-order-whatsapp"
                     onClick={handleWhatsAppDirect}
-                    style={{
-                      width: '100%',
-                      background: '#25D366',
-                      color: '#FFF',
-                      padding: '12px',
-                      borderRadius: '12px',
-                      border: 'none',
-                      fontWeight: 800,
-                      fontSize: '0.95rem',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '8px'
-                    }}
                   >
-                    <span>💬</span>
-                    <span>طلب مباشر عبر الواتساب</span>
+                    <span className="whatsapp-icon">💬</span>
+                    <span>طلب مباشر وتنسيق عبر الواتساب</span>
                   </button>
                 </div>
 
-                {/* Trust Badges */}
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '16px', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                  <span>🛡️ ضمان الجودة 100%</span>
-                  <span>⚡ تسليم موثوق</span>
-                  <span>🔄 تعديلات مفتوحة</span>
+                {/* Trust & Guarantee Badges */}
+                <div className="sidebar-trust-row">
+                  <div className="trust-item">
+                    <span className="trust-icon">🛡️</span>
+                    <span>دفع آمن 100%</span>
+                  </div>
+                  <div className="trust-item">
+                    <span className="trust-icon">⚡</span>
+                    <span>تسليم في الموعد</span>
+                  </div>
+                  <div className="trust-item">
+                    <span className="trust-icon">🔄</span>
+                    <span>تعديلات مفتوحة</span>
+                  </div>
                 </div>
               </div>
-
-              {/* Service Poster — same right column as HTML */}
-              <div className="service-page-poster-box" style={{ marginTop: '24px' }}>
-                <img
-                  src={service.image}
-                  alt={service.title}
-                  className="service-page-poster-img"
-                />
-              </div>
-            </div>
+            </aside>
           </div>
         </div>
       </section>
 
       {/* Guarantees Section */}
       {pageGuarantees && pageGuarantees.length > 0 && (
-        <section className="section-padding reveal-fade-up">
+        <section className="service-guarantees-section">
           <div className="container">
-            <div className="section-header-center">
-              <span className="section-subtitle-tag">🛡️ ضمانات الموثوقية</span>
-              <h2 className="section-main-title">
-                {guaranteesTitle || 'ضمانات كوبالت'}
+            <div className="guarantees-header-center">
+              <span className="guarantees-tag">🛡️ الموثوقية والأمان</span>
+              <h2 className="guarantees-title">
+                {guaranteesTitle || 'ضمانات كوبالت المعتمدة'}
               </h2>
+              <p className="guarantees-subtitle">
+                نلتزم بتقديم أعلى مستويات الجودة الاحترافية مع ضمان كامل لحقوقك ورضاك التام
+              </p>
             </div>
+
             <div className="guarantees-cards-grid">
               {pageGuarantees.map((g, idx) => (
-                <div key={idx} className="guarantee-card">
-                  <div className="guarantee-icon">{g.icon}</div>
-                  <h3 className="guarantee-title">{g.title}</h3>
-                  <p className="guarantee-desc">{g.desc}</p>
+                <div key={idx} className="modern-guarantee-card">
+                  <div className="guarantee-card-glow" />
+                  <div className="guarantee-icon-wrapper">
+                    <span className="guarantee-icon">{g.icon}</span>
+                  </div>
+                  <div className="guarantee-content-col">
+                    <h3 className="guarantee-card-title">{g.title}</h3>
+                    <p className="guarantee-card-desc">{g.desc}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </section>
       )}
-    </>
+    </div>
   );
 }

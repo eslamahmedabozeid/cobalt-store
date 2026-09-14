@@ -10,18 +10,18 @@ import { SERVICES_DATA } from '@/data/services';
 const PAGE_GUARANTEES = [
   {
     icon: '📁',
-    title: 'ملكية السورس كود بالكامل',
-    desc: 'تسليم كافة الملفات المصدرية والأكواد والتصميم (Figma, Source Code) 100%.'
+    title: 'ملكية السورس كود والتصميم 100%',
+    desc: 'تسليم كافة الملفات المصدرية للأكواد والتصميم (Figma, React/Next.js Source Code) فور الاعتماد.'
   },
   {
     icon: '⏱️',
-    title: 'سرعة وأداء فائق للموقع',
-    desc: 'نضمن سرعة تحميل فائقة وتصفح مرن متوافق مع كافة الأجهزة ومحركات البحث SEO.'
+    title: 'سرعة وأداء فائق متوافق مع SEO',
+    desc: 'نضمن سرعة تحميل خارقة على Google PageSpeed وتصفح متجاوب بالكامل مع كافة الشاشات والموبايل.'
   },
   {
     icon: '🔄',
     title: 'دعم فني وصيانة مجانية',
-    desc: 'دعم فني وضمان استقرار ونسخ احتياطي لمدة شهر كامل بعد إطلاق الموقع مجاناً.'
+    desc: 'دعم فني وضمان استقرار ونسخ احتياطي ومتابعة لمدة شهر كامل بعد إطلاق الموقع مجاناً.'
   }
 ];
 
@@ -35,7 +35,7 @@ const PAGE_OPTIONS = [
   { value: 'الأسئلة الشائعة (FAQ)', label: 'الأسئلة الشائعة (FAQ)' },
   { value: 'فريق العمل (Our Team)', label: 'فريق العمل (Our Team)' },
   { value: 'حجز موعد / استشارة (Booking)', label: 'حجز موعد (Booking)' },
-  { value: 'صفحة أخرى مخصصة', label: 'أخرى' }
+  { value: 'صفحة أخرى مخصصة', label: 'أخرى مخصصة' }
 ];
 
 const FEATURE_OPTIONS = [
@@ -44,12 +44,12 @@ const FEATURE_OPTIONS = [
   { value: 'بوابة دفع إلكتروني (Payment)', label: 'بوابة دفع (Payment)' },
   { value: 'نظام حجز ومواعيد (Booking)', label: 'نظام حجوزات (Booking)' },
   { value: 'خرائط جوجل (Google Maps)', label: 'خرائط جوجل (Maps)' },
-  { value: 'مدونة مقالات (Blog)', label: 'مدونة (Blog)' },
-  { value: 'شات ومحادثة حية (Live Chat)', label: 'محادثة حية (Chat)' },
+  { value: 'مدونة مقالات (Blog)', label: 'مدونة مقالات (Blog)' },
+  { value: 'شات ومحادثة حية (Live Chat)', label: 'محادثة حية (Live Chat)' },
   { value: 'نشرة بريدية (Newsletter)', label: 'نشرة بريدية (Newsletter)' },
   { value: 'حسابات وتسجيل أعضاء (User Accounts)', label: 'حسابات مستخدمين (Accounts)' },
   { value: 'تعدد اللغات (Multilingual)', label: 'تعدد لغات (Multilingual)' },
-  { value: 'خصائص برمجية أخرى (Other)', label: 'وظائف أخرى (Other)' }
+  { value: 'خصائص برمجية أخرى (Other)', label: 'وظائف أخرى مخصصة' }
 ];
 
 export default function WebsiteDesignPage() {
@@ -98,7 +98,7 @@ export default function WebsiteDesignPage() {
       return { valid: false, message: '⚠️ يرجى تحديد صفحة واحدة على الأقل من الصفحات المطلوبة' };
     }
     if (!features.length) {
-      return { valid: false, message: '⚠️ يرجى تحديد الوظائف المطلوبة' };
+      return { valid: false, message: '⚠️ يرجى تحديد الوظائف والخصائص المطلوبة' };
     }
     if (hasDomain === 'yes' && !domainName.trim()) {
       return { valid: false, message: '⚠️ يرجى كتابة اسم الدومين المحجوز' };
@@ -112,7 +112,7 @@ export default function WebsiteDesignPage() {
     return {
       valid: true,
       customData: {
-        'الخدمة': 'تصميم موقع إلكتروني',
+        'الخدمة': 'تصميم وتطوير موقع إلكتروني',
         'نوع الموقع': siteType,
         'اسم المشروع': projectName,
         'وصف النشاط': activityDesc,
@@ -135,31 +135,48 @@ export default function WebsiteDesignPage() {
       onValidateCustomFields={validateFields}
       guaranteesTitle="ضمانات كوبالت لخدمات تصميم وتطوير المواقع"
       pageGuarantees={PAGE_GUARANTEES}
+      stepLabels={['هوية ونوع الموقع', 'الصفحات والمحتوى', 'الوظائف والاستضافة']}
     >
-      {/* Section 1 */}
+      {/* Section 1: Project Identity */}
       <div className="questionnaire-section-box">
-        <h3 style={{ fontSize: '1.05rem', color: 'var(--cyan-accent)', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span>🏢</span> 1. نوع الموقع وهوية المشروع
-        </h3>
+        <div className="section-box-header">
+          <div className="section-step-badge">01</div>
+          <div className="section-header-info">
+            <h3 className="section-box-title">
+              <span className="section-icon">🏢</span> نوع الموقع وهوية المشروع
+            </h3>
+            <p className="section-box-desc">
+              حدد نوع الموقع وطبيعة نشاط الشركة لتهيئة التصميم والهيكل العام للمشروع
+            </p>
+          </div>
+        </div>
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🌐 نوع الموقع المطلوب <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">🌐</span>
+              <span>نوع الموقع المطلوب</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <select className="form-control" value={siteType} onChange={(e) => setSiteType(e.target.value)}>
-            <option value="شركة (Corporate Website)">شركة (Corporate Website)</option>
-            <option value="صفحة هبوط (Landing Page)">صفحة هبوط (Landing Page)</option>
-            <option value="معرض أعمال (Portfolio)">معرض أعمال (Portfolio)</option>
-            <option value="موقع خدمات (Services Site)">موقع خدمات (Services Site)</option>
-            <option value="موقع حجوزات ومواعيد (Booking)">موقع حجوزات ومواعيد (Booking)</option>
-            <option value="أخرى (Other)">أخرى</option>
+            <option value="شركة (Corporate Website)">موقع شركة ومؤسسة (Corporate Website)</option>
+            <option value="صفحة هبوط (Landing Page)">صفحة هبوط تسويقية (Landing Page)</option>
+            <option value="معرض أعمال (Portfolio)">معرض أعمال وسيرة مهنية (Portfolio)</option>
+            <option value="موقع خدمات (Services Site)">موقع عرض وحجز خدمات (Services Site)</option>
+            <option value="موقع حجوزات ومواعيد (Booking)">موقع حجوزات ومواعيد واستشارات (Booking)</option>
+            <option value="أخرى (Other)">نوع آخر مخصص (Other)</option>
           </select>
         </div>
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🏷️ اسم المشروع / الشركة <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">🏷️</span>
+              <span>اسم المشروع / الشركة</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <input
@@ -173,21 +190,26 @@ export default function WebsiteDesignPage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">📝 وصف النشاط والخدمات <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">📝</span>
+              <span>وصف النشاط والخدمات</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <textarea
             className="form-control"
             rows={3}
-            placeholder="نبذة تعريفية عن الشركة، ما تقدمه، ورسالتها الأساسية للزوار..."
+            placeholder="نبذة تعريفية عن الشركة، ما تقدمه من خدمات، ورسالتها الأساسية للزوار..."
             value={activityDesc}
             onChange={(e) => setActivityDesc(e.target.value)}
           />
         </div>
 
         <FileUploadBox
-          label="🖼️ الشعار (Logo)"
-          uploadTitle="ارفع ملف الشعار (PNG شفاف، AI، SVG، PDF)"
+          label="الشعار الرسمي (Logo)"
+          uploadTitle="ارفع ملف الشعار بدقة عالية (PNG شفاف، AI، SVG، PDF)"
+          icon="🖼️"
           accept="image/*,.ai,.svg,.pdf"
           files={logoFiles}
           onFilesChange={setLogoFiles}
@@ -195,9 +217,9 @@ export default function WebsiteDesignPage() {
         />
 
         <FileUploadBox
-          label="🎨 دليل الهوية والألوان (Brand Guidelines)"
-          uploadTitle="ارفع دليل الألوان والخطوط (PDF / AI)"
-          icon="📑"
+          label="دليل الهوية والألوان (Brand Guidelines)"
+          uploadTitle="ارفع دليل الألوان والخطوط (PDF / AI / ZIP)"
+          icon="🎨"
           accept=".pdf,.ai,.zip,.png,.jpg"
           files={brandFiles}
           onFilesChange={setBrandFiles}
@@ -205,16 +227,36 @@ export default function WebsiteDesignPage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🌐 هل يوجد موقع إلكتروني حالي؟ <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">🌐</span>
+              <span>هل يوجد موقع إلكتروني حالي للشركة؟</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <div className="switch-toggle-group">
-            <button type="button" className={`switch-toggle-btn ${hasCurrentSite === 'no' ? 'active' : ''}`} onClick={() => setHasCurrentSite('no')}>لا (No)</button>
-            <button type="button" className={`switch-toggle-btn ${hasCurrentSite === 'yes' ? 'active' : ''}`} onClick={() => setHasCurrentSite('yes')}>نعم (Yes)</button>
+            <button
+              type="button"
+              className={`switch-toggle-btn ${hasCurrentSite === 'no' ? 'active' : ''}`}
+              onClick={() => setHasCurrentSite('no')}
+            >
+              لا (موقع جديد كلياً)
+            </button>
+            <button
+              type="button"
+              className={`switch-toggle-btn ${hasCurrentSite === 'yes' ? 'active' : ''}`}
+              onClick={() => setHasCurrentSite('yes')}
+            >
+              نعم (إعادة تصميم وتطوير)
+            </button>
           </div>
           <div className={`conditional-field-wrapper ${hasCurrentSite === 'yes' ? 'active' : ''}`}>
             <div className="field-label-row">
-              <label className="field-title">🔗 رابط الموقع الحالي <span style={{ color: '#FBBF24' }}>*</span></label>
+              <label className="field-title">
+                <span className="field-icon">🔗</span>
+                <span>رابط الموقع الحالي</span>
+                <span className="req-star" style={{ color: '#FBBF24' }}>*</span>
+              </label>
               <span className="field-req-badge badge-conditional">شرطي</span>
             </div>
             <input
@@ -223,20 +265,33 @@ export default function WebsiteDesignPage() {
               placeholder="https://your-current-website.com"
               value={currentSiteUrl}
               onChange={(e) => setCurrentSiteUrl(e.target.value)}
+              dir="ltr"
             />
           </div>
         </div>
       </div>
 
-      {/* Section 2 */}
+      {/* Section 2: Pages & Media */}
       <div className="questionnaire-section-box">
-        <h3 style={{ fontSize: '1.05rem', color: 'var(--cyan-accent)', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span>📑</span> 2. الصفحات والمحتوى والوسائط
-        </h3>
+        <div className="section-box-header">
+          <div className="section-step-badge">02</div>
+          <div className="section-header-info">
+            <h3 className="section-box-title">
+              <span className="section-icon">📑</span> الصفحات والمحتوى والوسائط
+            </h3>
+            <p className="section-box-desc">
+              حدد قائمة الصفحات المطلوبة وجاهزية المحتوى النصي والصور المرفقة
+            </p>
+          </div>
+        </div>
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">📄 الصفحات المطلوبة في الموقع <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">📄</span>
+              <span>الصفحات المطلوبة في الموقع</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <MultiChipSelector options={PAGE_OPTIONS} selected={pages} onChange={setPages} />
@@ -244,18 +299,22 @@ export default function WebsiteDesignPage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">✍️ هل المحتوى النصي جاهز؟ <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">✍️</span>
+              <span>هل المحتوى النصي للموقع جاهز؟</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <select className="form-control" value={contentReady} onChange={(e) => setContentReady(e.target.value)}>
             <option value="نعم">نعم، جاهز بالكامل (Yes, fully ready)</option>
             <option value="جزئي">جزئي (يحتاج صياغة وتنسيق)</option>
-            <option value="لا">لا (نحتاج كتابة المحتوى من قبلكم)</option>
+            <option value="لا">لا (نحتاج كتابة المحتوى وصياغته من قبلكم)</option>
           </select>
 
           <div className={`conditional-field-wrapper ${contentReady === 'نعم' || contentReady === 'جزئي' ? 'active' : ''}`}>
             <FileUploadBox
-              label="📁 رفع ملفات المحتوى النصي"
+              label="رفع ملفات المحتوى النصي"
               uploadTitle="ارفع ملفات Word، PDF، أو نصوص المحتوى"
               icon="📄"
               accept=".doc,.docx,.pdf,.txt"
@@ -268,9 +327,9 @@ export default function WebsiteDesignPage() {
         </div>
 
         <FileUploadBox
-          label="📸 صور المنشأة والمشاريع"
-          uploadTitle="ارفع صور عالية الدقة للموقع"
-          icon="🖼️"
+          label="صور المنشأة والمشاريع"
+          uploadTitle="ارفع صور عالية الدقة للموقع (صور المقر، الفريق، الأعمال)"
+          icon="📸"
           accept="image/*,.zip"
           multiple
           files={photoFiles}
@@ -278,9 +337,9 @@ export default function WebsiteDesignPage() {
         />
 
         <FileUploadBox
-          label="🎥 مقاطع الفيديو للموقع"
-          uploadTitle="ارفع مقاطع الفيديو أو روابط يوتيوب/فيميو"
-          icon="🎬"
+          label="مقاطع الفيديو للموقع إن وجدت"
+          uploadTitle="ارفع مقاطع الفيديو أو الفيديوهات التعريفية"
+          icon="🎥"
           accept="video/*,.zip"
           multiple
           files={videoFiles}
@@ -289,19 +348,23 @@ export default function WebsiteDesignPage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🌐 لغات الموقع المطلوب <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">🌐</span>
+              <span>لغات الموقع المطلوب</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <select className="form-control" value={language} onChange={(e) => setLanguage(e.target.value)}>
-            <option value="العربية (Arabic)">العربية (Arabic)</option>
-            <option value="الإنجليزية (English)">الإنجليزية (English)</option>
-            <option value="ثنائي اللغة (عربي + إنجليزي)">ثنائي اللغة (عربي + إنجليزي)</option>
-            <option value="لغات أخرى">أخرى</option>
+            <option value="العربية (Arabic)">العربية فقط (Arabic)</option>
+            <option value="الإنجليزية (English)">الإنجليزية فقط (English)</option>
+            <option value="ثنائي اللغة (عربي + إنجليزي)">ثنائي اللغة (عربي + إنجليزي متكامل)</option>
+            <option value="لغات أخرى">لغات أخرى مخصصة</option>
           </select>
         </div>
 
         <UrlRepeater
-          label="💡 مواقع مرجعية تفضل تصميمها"
+          label="مواقع مرجعية تفضل أسلوب تصميمها"
           placeholder="https://example.com"
           urls={refUrls}
           onChange={setRefUrls}
@@ -309,15 +372,27 @@ export default function WebsiteDesignPage() {
         />
       </div>
 
-      {/* Section 3 */}
+      {/* Section 3: Features & Hosting */}
       <div className="questionnaire-section-box">
-        <h3 style={{ fontSize: '1.05rem', color: 'var(--cyan-accent)', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span>⚡</span> 3. الوظائف المطلوبة والنطاق والاستضافة
-        </h3>
+        <div className="section-box-header">
+          <div className="section-step-badge">03</div>
+          <div className="section-header-info">
+            <h3 className="section-box-title">
+              <span className="section-icon">⚙️</span> الوظائف المطلوبة والنطاق والاستضافة
+            </h3>
+            <p className="section-box-desc">
+              تحديد الميزات التفاعلية وحالة النطاق (Domain) والاستضافة السحابية
+            </p>
+          </div>
+        </div>
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">⚙️ الوظائف والخصائص المطلوبة <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">⚙️</span>
+              <span>الوظائف والخصائص البرمجية المطلوبة</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <MultiChipSelector options={FEATURE_OPTIONS} selected={features} onChange={setFeatures} />
@@ -325,16 +400,36 @@ export default function WebsiteDesignPage() {
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">🌐 هل لديك اسم نطاق (Domain) محجوز؟ <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">🌐</span>
+              <span>هل لديك اسم نطاق (Domain) محجوز؟</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <div className="switch-toggle-group">
-            <button type="button" className={`switch-toggle-btn ${hasDomain === 'no' ? 'active' : ''}`} onClick={() => setHasDomain('no')}>لا (نحتاج حجز دومين جديد)</button>
-            <button type="button" className={`switch-toggle-btn ${hasDomain === 'yes' ? 'active' : ''}`} onClick={() => setHasDomain('yes')}>نعم (لدي دومين جاهز)</button>
+            <button
+              type="button"
+              className={`switch-toggle-btn ${hasDomain === 'no' ? 'active' : ''}`}
+              onClick={() => setHasDomain('no')}
+            >
+              لا (نحتاج حجز دومين جديد)
+            </button>
+            <button
+              type="button"
+              className={`switch-toggle-btn ${hasDomain === 'yes' ? 'active' : ''}`}
+              onClick={() => setHasDomain('yes')}
+            >
+              نعم (لدي دومين جاهز)
+            </button>
           </div>
           <div className={`conditional-field-wrapper ${hasDomain === 'yes' ? 'active' : ''}`}>
             <div className="field-label-row">
-              <label className="field-title">🔗 اكتب اسم الدومين المحجوز <span style={{ color: '#FBBF24' }}>*</span></label>
+              <label className="field-title">
+                <span className="field-icon">🔗</span>
+                <span>اكتب اسم الدومين المحجوز</span>
+                <span className="req-star" style={{ color: '#FBBF24' }}>*</span>
+              </label>
               <span className="field-req-badge badge-conditional">شرطي</span>
             </div>
             <input
@@ -343,22 +438,43 @@ export default function WebsiteDesignPage() {
               placeholder="example.com أو company.sa"
               value={domainName}
               onChange={(e) => setDomainName(e.target.value)}
+              dir="ltr"
             />
           </div>
         </div>
 
         <div className="form-field-group">
           <div className="field-label-row">
-            <label className="field-title">☁️ هل لديك استضافة وسيرفر (Hosting)؟ <span style={{ color: '#F87171' }}>*</span></label>
+            <label className="field-title">
+              <span className="field-icon">☁️</span>
+              <span>هل لديك استضافة وسيرفر (Hosting)؟</span>
+              <span className="req-star" style={{ color: '#F87171' }}>*</span>
+            </label>
             <span className="field-req-badge badge-required">إجباري</span>
           </div>
           <div className="switch-toggle-group">
-            <button type="button" className={`switch-toggle-btn ${hasHosting === 'no' ? 'active' : ''}`} onClick={() => setHasHosting('no')}>لا (وفروا الاستضافة السريعة مجاناً)</button>
-            <button type="button" className={`switch-toggle-btn ${hasHosting === 'yes' ? 'active' : ''}`} onClick={() => setHasHosting('yes')}>نعم (لدي استضافة خاصة)</button>
+            <button
+              type="button"
+              className={`switch-toggle-btn ${hasHosting === 'no' ? 'active' : ''}`}
+              onClick={() => setHasHosting('no')}
+            >
+              لا (وفروا استضافة سريعة مع الباقة)
+            </button>
+            <button
+              type="button"
+              className={`switch-toggle-btn ${hasHosting === 'yes' ? 'active' : ''}`}
+              onClick={() => setHasHosting('yes')}
+            >
+              نعم (لدي استضافة خاصة)
+            </button>
           </div>
           <div className={`conditional-field-wrapper ${hasHosting === 'yes' ? 'active' : ''}`}>
             <div className="field-label-row">
-              <label className="field-title">🏢 اسم مزود الاستضافة <span style={{ color: '#FBBF24' }}>*</span></label>
+              <label className="field-title">
+                <span className="field-icon">🏢</span>
+                <span>اسم مزود الاستضافة أو بيانات السيرفر</span>
+                <span className="req-star" style={{ color: '#FBBF24' }}>*</span>
+              </label>
               <span className="field-req-badge badge-conditional">شرطي</span>
             </div>
             <input

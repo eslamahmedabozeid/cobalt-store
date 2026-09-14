@@ -13,77 +13,70 @@ export default function PortfolioModal({ item, onClose }: PortfolioModalProps) {
   if (!item) return null;
 
   return (
-    <div id="portfolioModal" className="modal-overlay active" onClick={onClose}>
+    <div id="portfolioModal" className="portfolio-modal-overlay show active" onClick={onClose}>
       <div
-        className="modal-container"
-        style={{ maxWidth: '840px' }}
+        className="portfolio-modal-box"
         onClick={(e) => e.stopPropagation()}
         dir="rtl"
       >
-        <button onClick={onClose} className="modal-close-btn" type="button">
+        {/* Close Button Top Left */}
+        <button
+          onClick={onClose}
+          className="portfolio-modal-close"
+          type="button"
+          aria-label="إغلاق النافذة"
+        >
           ✕
         </button>
 
-        <div className="modal-body" style={{ padding: '35px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px', alignItems: 'center' }}>
-            <div>
-              <img
-                id="portModalImg"
-                src={item.image}
-                alt={item.title}
-                style={{
-                  width: '100%',
-                  height: '340px',
-                  objectFit: 'cover',
-                  borderRadius: 'var(--radius-md)',
-                  border: '2px solid var(--border-active)',
-                  boxShadow: 'var(--shadow-lg)'
-                }}
-              />
+        <div className="portfolio-modal-grid">
+          {/* Media image container on top on mobile, left on desktop */}
+          <div className="portfolio-modal-media">
+            <img
+              id="portModalImg"
+              src={item.image}
+              alt={item.title}
+              className="portfolio-modal-img"
+            />
+          </div>
+
+          {/* Project Details Content */}
+          <div className="portfolio-modal-content">
+            <div className="portfolio-modal-tag-badge">
+              <span>✨ {item.categoryName}</span>
             </div>
 
-            <div>
-              <span id="portModalTag" className="section-subtitle-tag">
-                ✨ {item.categoryName}
-              </span>
-              <h3 id="portModalTitle" style={{ fontSize: '1.4rem', fontWeight: 900, color: '#FFF', margin: '10px 0' }}>
-                {item.title}
-              </h3>
+            <h3 id="portModalTitle" className="portfolio-modal-title">
+              {item.title}
+            </h3>
 
-              <div
-                style={{
-                  fontSize: '0.88rem',
-                  color: 'var(--text-muted)',
-                  marginBottom: '16px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '6px',
-                  background: 'rgba(14, 31, 71, 0.6)',
-                  padding: '12px 16px',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--border-color)'
-                }}
-              >
-                <div>
-                  🏢 <strong>جهة المشروع / العميل:</strong> <span style={{ color: '#FFF' }}>{item.client}</span>
-                </div>
-                <div>
-                  ⏱️ <strong>مدة التنفيذ:</strong> <span style={{ color: 'var(--cyan-accent)', fontWeight: 800 }}>{item.duration}</span>
-                </div>
+            <div className="portfolio-modal-meta-box">
+              <div className="meta-row-item">
+                <span className="meta-icon">🏢</span>
+                <span className="meta-label">جهة المشروع / العميل:</span>
+                <strong className="meta-val">{item.client}</strong>
               </div>
+              <div className="meta-row-item">
+                <span className="meta-icon">⏱️</span>
+                <span className="meta-label">مدة التنفيذ:</span>
+                <strong className="meta-val highlight">{item.duration}</strong>
+              </div>
+            </div>
 
-              <p id="portModalDesc" style={{ fontSize: '0.92rem', color: 'var(--text-light)', lineHeight: '1.7', marginBottom: '24px' }}>
-                {item.desc}
-              </p>
+            <p id="portModalDesc" className="portfolio-modal-desc">
+              {item.desc}
+            </p>
 
+            <div className="portfolio-modal-actions">
               <Link
                 id="portModalActionBtn"
                 href={item.serviceUrl}
                 onClick={onClose}
-                className="btn-primary"
-                style={{ width: '100%', justifyContent: 'center', textAlign: 'center' }}
+                className="btn-order-primary"
               >
-                🛒 اطلب نفس الباقة لهذا المشروع
+                <span className="btn-icon">🛒</span>
+                <span className="btn-text">اطلب نفس الباقة لهذا المشروع</span>
+                <span className="btn-arrow">←</span>
               </Link>
             </div>
           </div>

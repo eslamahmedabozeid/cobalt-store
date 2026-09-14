@@ -30,14 +30,20 @@ export default function UrlRepeater({
   };
 
   const removeUrl = (index: number) => {
-    onChange(urls.filter((_, i) => i !== index));
+    if (urls.length <= 1) {
+      onChange(['']);
+    } else {
+      onChange(urls.filter((_, i) => i !== index));
+    }
   };
 
   return (
     <div className="form-field-group">
       <div className="field-label-row">
         <label className="field-title">
-          {label} {required && <span style={{ color: '#F87171' }}>*</span>}
+          <span className="field-icon">🔗</span>
+          <span>{label}</span>
+          {required && <span className="req-star" style={{ color: '#F87171' }}>*</span>}
         </label>
         {required ? (
           <span className="field-req-badge badge-required">إجباري</span>
@@ -49,26 +55,38 @@ export default function UrlRepeater({
       <div className="url-repeater-container">
         {urls.map((url, idx) => (
           <div key={idx} className="url-repeater-row">
-            <input
-              type="url"
-              className="form-control dynamic-url-input"
-              placeholder={placeholder}
-              value={url}
-              onChange={(e) => updateUrl(idx, e.target.value)}
-            />
-            <button
-              type="button"
-              className="btn-remove-url"
-              onClick={() => removeUrl(idx)}
-              title="حذف الرابط"
-            >
-              ✕
-            </button>
+            <div className="url-input-wrapper">
+              <span className="url-input-icon">🌐</span>
+              <input
+                type="url"
+                className="form-control dynamic-url-input"
+                placeholder={placeholder}
+                value={url}
+                onChange={(e) => updateUrl(idx, e.target.value)}
+                dir="ltr"
+              />
+            </div>
+            {urls.length > 1 && (
+              <button
+                type="button"
+                className="btn-remove-url"
+                onClick={() => removeUrl(idx)}
+                title="حذف هذا الرابط"
+                aria-label="حذف الرابط"
+              >
+                ✕
+              </button>
+            )}
           </div>
         ))}
 
-        <button type="button" onClick={addUrl} className="btn-add-url">
-          {addButtonLabel}
+        <button
+          type="button"
+          onClick={addUrl}
+          className="btn-add-url"
+        >
+          <span className="add-icon">+</span>
+          <span>{addButtonLabel}</span>
         </button>
       </div>
     </div>
