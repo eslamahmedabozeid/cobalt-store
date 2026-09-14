@@ -10,10 +10,7 @@ export default function CheckoutModal() {
     isCheckoutOpen,
     setIsCheckoutOpen,
     items,
-    subtotalSAR,
-    discountSAR,
     grandTotalSAR,
-    cartState,
     clearCart
   } = useCart();
 
@@ -43,15 +40,19 @@ export default function CheckoutModal() {
     let orderText = `*طلب جديد من متجر كوبالت الرقمي* 🚀\n\n`;
     orderText += `👤 *العميل:* ${formData.fullName}\n`;
     orderText += `📱 *الجوال:* ${formData.phone}\n`;
+    if (formData.email) orderText += `📧 *البريد:* ${formData.email}\n`;
     orderText += `💳 *طريقة الدفع:* ${formData.paymentMethod.toUpperCase()}\n`;
     orderText += `🌐 *العملة:* ${currentCurrency}\n\n`;
 
-    orderText += `📋 *الخدمات:*\n`;
+    orderText += `📋 *تفاصيل الطلب:*\n`;
     items.forEach((item, index) => {
       orderText += `${index + 1}. *${item.serviceTitle}* (${item.selectedOption}) x${item.qty} - ${formatPrice(item.unitPriceSAR * item.qty)}\n`;
+      if (item.selectedAddons && item.selectedAddons.length > 0) {
+        orderText += `   + الإضافات: ${item.selectedAddons.join(', ')}\n`;
+      }
     });
 
-    orderText += `\n💵 *الإجمالي:* ${formatPrice(grandTotalSAR)}\n`;
+    orderText += `\n💵 *الإجمالي النهائي:* ${formatPrice(grandTotalSAR)}\n`;
     if (formData.notes) orderText += `📝 *ملاحظات:* ${formData.notes}\n`;
 
     const whatsappUrl = `https://wa.me/966500000000?text=${encodeURIComponent(orderText)}`;
@@ -63,86 +64,83 @@ export default function CheckoutModal() {
   };
 
   return (
-    <div id="checkoutModal" className="modal-overlay active" onClick={() => setIsCheckoutOpen(false)}>
+    <div
+      id="checkoutModal"
+      className="checkout-modal-overlay show active"
+      onClick={() => setIsCheckoutOpen(false)}
+    >
       <div
-        className="modal-container"
-        style={{ maxWidth: '660px' }}
+        className="checkout-modal-box"
         onClick={(e) => e.stopPropagation()}
         dir="rtl"
       >
-        <button onClick={() => setIsCheckoutOpen(false)} className="modal-close-btn" type="button">
+        {/* Close Button Top Left */}
+        <button
+          onClick={() => setIsCheckoutOpen(false)}
+          className="checkout-modal-close-btn"
+          type="button"
+          aria-label="إغلاق النافذة"
+        >
           ✕
         </button>
 
-        <div className="modal-body" style={{ padding: '38px 40px' }}>
-          {isSuccess ? (
-            <div style={{ textAlign: 'center', padding: '20px 0' }}>
-              <div style={{ fontSize: '3.5rem', marginBottom: '14px' }}>🎉</div>
-              <h3 style={{ color: '#FFF', fontSize: '1.4rem', fontWeight: 900, marginBottom: '10px' }}>
-                تم إرسال طلبك بنجاح!
-              </h3>
-              <p style={{ color: 'var(--text-light)', lineHeight: '1.7', marginBottom: '24px' }}>
-                شكراً لثقتك في كوبالت. تم فتح محادثة الواتساب المباشرة مع مدير المشاريع لبدء تنفيذ طلبك فوراً.
-              </p>
-              <button className="btn-primary" onClick={() => setIsCheckoutOpen(false)} type="button">
-                العودة للمتجر
-              </button>
-            </div>
-          ) : (
-            <>
-              <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-                <span className="section-subtitle-tag">🔒 دفع إلكتروني آمن 100%</span>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#FFF', marginTop: '6px' }}>
+        {isSuccess ? (
+          <div className="checkout-success-view">
+            <div className="success-icon-badge">🎉</div>
+            <h3 className="success-title">
+              تم إرسال طلبك بنجاح!
+            </h3>
+            <p className="success-desc">
+              شكراً لثقتك في كوبالت. تم فتح محادثة الواتساب المباشرة مع مدير المشاريع لبدء تنفيذ طلبك فوراً.
+            </p>
+            <button
+              className="btn-order-primary"
+              onClick={() => {
+                setIsSuccess(false);
+                setIsCheckoutOpen(false);
+              }}
+              type="button"
+              style={{ width: '100%', maxWidth: '280px', margin: '0 auto' }}
+            >
+              العودة للمتجر
+            </button>
+          </div>
+        ) : (
+          <>
+            {/* Scrollable Body Container */}
+            <div className="checkout-modal-body-scrollable">
+              {/* Header */}
+              <div className="checkout-header-block">
+                <span className="checkout-security-tag">🔒 دفع إلكتروني آمن 100%</span>
+                <h2 className="checkout-main-title">
                   إتمام الطلب وتأكيد الدفع
                 </h2>
-                <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
-                  أدخل بيانات التواصل واختر وسيلة الدفع المفضلة لإتمام طلبك.
+                <p className="checkout-sub-title">
+                  أدخل بيانات التواصل واختر وسيلة الدفع المفضلة لإتمام طلبك
                 </p>
               </div>
 
               {/* Order Summary Card */}
-              <div
-                style={{
-                  background: 'rgba(14, 31, 71, 0.7)',
-                  border: '1px solid var(--cyan-accent)',
-                  borderRadius: 'var(--radius-md)',
-                  padding: '18px 24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: '24px',
-                  boxShadow: 'var(--shadow-sm)'
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>المبلغ الإجمالي المطلـوب:</div>
-                  <div id="checkoutTotalDisplay" style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--cyan-accent)' }}>
+              <div className="checkout-summary-card">
+                <div className="summary-left-info">
+                  <div className="summary-label">المبلغ الإجمالي المطلوب:</div>
+                  <div id="checkoutTotalDisplay" className="summary-total-amount">
                     {formatPrice(grandTotalSAR)}
                   </div>
                 </div>
-                <div style={{ textAlign: 'left' }}>
-                  <span
-                    style={{
-                      background: 'rgba(16, 185, 129, 0.15)',
-                      border: '1px solid var(--emerald-accent)',
-                      color: 'var(--emerald-accent)',
-                      padding: '4px 12px',
-                      borderRadius: 'var(--radius-full)',
-                      fontSize: '0.76rem',
-                      fontWeight: 800
-                    }}
-                  >
+                <div className="summary-right-badge">
+                  <span className="vat-badge-tag">
                     ✓ شامل ضريبة 15%
                   </span>
                 </div>
               </div>
 
               {/* Payment Method Selection Grid */}
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 700, marginBottom: '10px', display: 'block' }}>
+              {/* <div className="checkout-payment-section">
+                <label className="checkout-section-label">
                   حدد طريقة الدفع المفضلة:
                 </label>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(125px, 1fr))', gap: '10px' }}>
+                <div className="checkout-payment-grid">
                   {[
                     { id: 'mada', flag: '🇸🇦', title: 'مدى (Mada)' },
                     { id: 'apple_pay', flag: '🍏', title: 'Apple Pay' },
@@ -151,24 +149,28 @@ export default function CheckoutModal() {
                   ].map((p) => (
                     <div
                       key={p.id}
-                      className={`payment-method-card ${formData.paymentMethod === p.id ? 'active' : ''}`}
+                      className={`checkout-payment-card ${formData.paymentMethod === p.id ? 'active' : ''}`}
                       onClick={() => setFormData({ ...formData, paymentMethod: p.id })}
                     >
-                      <span style={{ fontSize: '1.3rem' }}>{p.flag}</span>
-                      <span>{p.title}</span>
+                      <span className="payment-card-icon">{p.flag}</span>
+                      <span className="payment-card-text">{p.title}</span>
+                      {formData.paymentMethod === p.id && (
+                        <span className="payment-card-check">✓</span>
+                      )}
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
 
-              <form onSubmit={handleSubmitOrder}>
-                <div className="form-group" style={{ marginBottom: '16px' }}>
-                  <label style={{ fontSize: '0.85rem', color: 'var(--text-light)', fontWeight: 700, marginBottom: '6px', display: 'block' }}>
-                    الاسم الكامل *
+              {/* Form Inputs */}
+              <form id="checkoutForm" onSubmit={handleSubmitOrder} className="checkout-form-fields">
+                <div className="form-group-item">
+                  <label className="checkout-input-label">
+                    الاسم الكامل <span className="req-star">*</span>
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="checkout-form-input"
                     placeholder="مثال: عبد الله أحمد"
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
@@ -176,58 +178,64 @@ export default function CheckoutModal() {
                   />
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '24px' }}>
-                  <div className="form-group">
-                    <label style={{ fontSize: '0.85rem', color: 'var(--text-light)', fontWeight: 700, marginBottom: '6px', display: 'block' }}>
-                      رقم الجوال (واتساب) *
+                <div className="checkout-inputs-row">
+                  <div className="form-group-item">
+                    <label className="checkout-input-label">
+                      رقم الجوال (واتساب) <span className="req-star">*</span>
                     </label>
                     <input
                       type="tel"
-                      className="form-control"
+                      className="checkout-form-input"
                       placeholder="05xxxxxxxx"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       required
                     />
                   </div>
-                  <div className="form-group">
-                    <label style={{ fontSize: '0.85rem', color: 'var(--text-light)', fontWeight: 700, marginBottom: '6px', display: 'block' }}>
-                      البريد الإلكتروني (اختياري)
+                  <div className="form-group-item">
+                    <label className="checkout-input-label">
+                      البريد الإلكتروني
                     </label>
                     <input
                       type="email"
-                      className="form-control"
+                      className="checkout-form-input"
                       placeholder="name@company.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      required
                     />
                   </div>
                 </div>
 
-                <div className="form-group" style={{ marginBottom: '24px' }}>
-                  <label style={{ fontSize: '0.85rem', color: 'var(--text-light)', fontWeight: 700, marginBottom: '6px', display: 'block' }}>
+                <div className="form-group-item">
+                  <label className="checkout-input-label">
                     ملاحظات أو روابط إضافية (اختياري)
                   </label>
                   <textarea
-                    className="form-control"
+                    className="checkout-form-input checkout-textarea"
                     rows={2}
-                    placeholder="أي ملاحظات تود إضافتها مع الطلب..."
+                    placeholder="أي ملاحظات أو تفاصيل تود إضافتها مع الطلب..."
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   />
                 </div>
-
-                <button
-                  type="submit"
-                  className="btn-primary"
-                  style={{ width: '100%', justifyContent: 'center', padding: '16px', fontSize: '1.05rem' }}
-                >
-                  🔒 تأكيد الدفع وإتمام الطلب ({formatPrice(grandTotalSAR)})
-                </button>
               </form>
-            </>
-          )}
-        </div>
+            </div>
+
+            {/* Dedicated Sticky Footer Bar for Checkout Submit Button */}
+            <div className="checkout-modal-footer-bar">
+              <button
+                type="submit"
+                form="checkoutForm"
+                className="btn-checkout-submit"
+              >
+                <span className="btn-icon">🔒</span>
+                <span className="btn-text">تأكيد الدفع وإتمام الطلب ({formatPrice(grandTotalSAR)})</span>
+                <span className="btn-arrow">←</span>
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

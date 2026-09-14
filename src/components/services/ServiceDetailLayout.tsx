@@ -34,6 +34,14 @@ export default function ServiceDetailLayout({
   const [selectedAddonIds, setSelectedAddonIds] = useState<string[]>([]);
   const [quantity, setQuantity] = useState<number>(1);
 
+  // Stepper vs Full View State (Default to Stepper for clean, compact UX)
+  const [activeStep, setActiveStep] = useState<number>(0);
+  const [viewMode, setViewMode] = useState<'stepper' | 'all'>('stepper');
+
+  // Convert children to sections array
+  const sections = React.Children.toArray(children);
+  const totalSteps = stepLabels?.length || sections.length;
+
   // Selected Package Info
   const selectedPackage =
     service.packageTypes.find((p) => p.id === selectedPackageId) ||
@@ -118,6 +126,20 @@ export default function ServiceDetailLayout({
 
     const url = `https://wa.me/966500000000?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank');
+  };
+
+  const scrollToQuestionnaireTop = () => {
+    const el = document.querySelector('.questionnaire-card');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const scrollToSidebar = () => {
+    const el = document.querySelector('.sticky-order-box');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   };
 
   return (
@@ -218,25 +240,118 @@ export default function ServiceDetailLayout({
                 </div>
               </div>
 
-              {/* Step Navigation / Flow Indicator (if step labels provided) */}
-              {stepLabels && stepLabels.length > 0 && (
-                <div className="questionnaire-steps-tracker">
-                  <div className="tracker-title">مراحل استبيان متطلبات المشروع:</div>
-                  <div className="steps-tracker-list">
-                    {stepLabels.map((label, idx) => (
-                      <div key={idx} className="step-tracker-item">
-                        <span className="step-num">{idx + 1}</span>
-                        <span className="step-label">{label}</span>
-                        {idx < stepLabels.length - 1 && <span className="step-arrow">←</span>}
-                      </div>
-                    ))}
+              {/* Interactive Multi-Step Stepper Controller */}
+              {stepLabels && stepLabels.length > 1 && (
+                <div className="questionnaire-stepper-control">
+                  <div className="stepper-header-row">
+                    <div className="stepper-status-title">
+                      <span className="stepper-step-indicator">
+                        الخطوة {activeStep + 1} من {totalSteps}:
+                      </span>
+                      <strong className="stepper-active-name">
+                        {stepLabels[activeStep] || `القسم ${activeStep + 1}`}
+                      </strong>
+                    </div>
+
+                    <div className="stepper-actions-tools">
+                      <button
+                        type="button"
+                        className={`btn-view-toggle ${viewMode === 'all' ? 'active' : ''}`}
+                        onClick={() => setViewMode(viewMode === 'stepper' ? 'all' : 'stepper')}
+                        title="تبديل طريقة العرض"
+                      >
+                        <span>{viewMode === 'stepper' ? '📜 إظهار كافة الأقسام' : '⚡ عرض الخطوات الميسرة'}</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Progress Line */}
+                  <div className="stepper-progress-track">
+                    <div
+                      className="stepper-progress-fill"
+                      style={{ width: `${((activeStep + 1) / totalSteps) * 100}%` }}
+                    />
+                  </div>
+
+                  {/* Step Interactive Tabs */}
+                  <div className="stepper-tabs-container">
+                    {stepLabels.map((label, idx) => {
+                      const isActive = activeStep === idx;
+                      const isPast = activeStep > idx;
+
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          className={`stepper-tab-btn ${isActive ? 'active' : ''} ${isPast ? 'completed' : ''}`}
+                          onClick={() => {
+                            setActiveStep(idx);
+                            scrollToQuestionnaireTop();
+                          }}
+                        >
+                          <span className="tab-number-badge">
+                            {isPast ? '✓' : idx + 1}
+                          </span>
+                          <span className="tab-label-text">{label}</span>
+                          {isActive && <span className="tab-glow-indicator" />}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
 
-              {/* Custom Questionnaire Form Fields */}
+              {/* Custom Questionnaire Form Body */}
               <div className="questionnaire-body">
-                {children}
+                {viewMode === 'stepper' && sections.length > 1 ? (
+                  <div className="single-step-content-view">
+                    {sections[activeStep] || sections[0]}
+
+                    {/* Step Navigation Bar */}
+                    <div className="step-navigation-bar">
+                      {activeStep > 0 && (
+                        <button
+                          type="button"
+                          className="btn-step-prev"
+                          onClick={() => {
+                            setActiveStep(activeStep - 1);
+                            scrollToQuestionnaireTop();
+                          }}
+                        >
+                          <span className="btn-nav-arrow">→</span>
+                          <span>السابق: {stepLabels?.[activeStep - 1] || `الخطوة ${activeStep}`}</span>
+                        </button>
+                      )}
+
+                      {activeStep < sections.length - 1 ? (
+                        <button
+                          type="button"
+                          className="btn-step-next"
+                          onClick={() => {
+                            setActiveStep(activeStep + 1);
+                            scrollToQuestionnaireTop();
+                          }}
+                        >
+                          <span>المتابعة إلى: {stepLabels?.[activeStep + 1] || `الخطوة ${activeStep + 2}`}</span>
+                          <span className="btn-nav-arrow">←</span>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="btn-step-finish"
+                          onClick={scrollToSidebar}
+                        >
+                          <span>✨ اكتمل الاستبيان - اختر الباقة وأضف للسلة</span>
+                          <span className="btn-nav-arrow">↓</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="all-steps-content-view">
+                    {children}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -420,6 +535,32 @@ export default function ServiceDetailLayout({
           </div>
         </div>
       </section>
+
+      {/* Mobile Sticky Floating Order Bar */}
+      <div className="mobile-floating-order-bar">
+        <div className="floating-order-info">
+          <span className="floating-order-label">السعر الإجمالي:</span>
+          <span className="floating-order-price">{formatPrice(totalPriceSAR)}</span>
+        </div>
+        <div className="floating-order-actions">
+          <button
+            type="button"
+            className="floating-btn-cart"
+            onClick={handleAddToCart}
+          >
+            <span className="floating-btn-icon">🛒</span>
+            <span>أضف للسلة</span>
+          </button>
+          <button
+            type="button"
+            className="floating-btn-customize"
+            onClick={scrollToSidebar}
+            title="تخصيص الباقة"
+          >
+            <span>⚡ الباقات</span>
+          </button>
+        </div>
+      </div>
 
       {/* Guarantees Section */}
       {pageGuarantees && pageGuarantees.length > 0 && (

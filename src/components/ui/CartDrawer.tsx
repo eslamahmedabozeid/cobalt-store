@@ -100,8 +100,7 @@ export default function CartDrawer() {
                           color: '#FFF',
                           border: 'none',
                           borderRadius: '4px',
-                          width: '24px',
-                          height: '24px',
+                          padding: '1px 10px',
                           cursor: 'pointer'
                         }}
                       >
@@ -116,8 +115,7 @@ export default function CartDrawer() {
                           color: '#FFF',
                           border: 'none',
                           borderRadius: '4px',
-                          width: '24px',
-                          height: '24px',
+                          padding: '1px 10px',
                           cursor: 'pointer'
                         }}
                       >
